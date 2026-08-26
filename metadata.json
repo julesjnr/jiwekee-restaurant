@@ -1,0 +1,8 @@
+{
+  "name": "Jiwekee Restaurant",
+  "description": "Authentic modern dining & food-ordering platform for Jiwekee Tavern & Grill featuring Safaricom M-Pesa STK, digital loyalty wallet, live order tracking, table booking, and comprehensive restaurant operations management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
