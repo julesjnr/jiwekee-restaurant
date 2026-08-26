@@ -219,38 +219,37 @@ export default function AdminMenu() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="admin-card-header">
         <div>
-          <h2 style={{ fontSize: "20px", color: "#fff", margin: 0 }}>Restaurant Menu Management</h2>
-          <p style={{ fontSize: "13px", color: "#888", margin: "4px 0 0" }}>
-            Add, update pricing, categories, prep times, and toggle dish availability.
+          <h2 className="admin-card-title">
+            <i className="fa fa-utensils" style={{ color: "var(--primary)" }}></i>
+            Restaurant Menu Catalog Management
+          </h2>
+          <p className="admin-card-desc">
+            Add new signature dishes, adjust pricing, categories, prep estimates, and toggle live item availability for guests.
           </p>
         </div>
-        <button onClick={handleOpenAdd} className="btn-action-sm btn-action-primary">
-          + Add New Dish
+        <button onClick={handleOpenAdd} className="btn-restoran-primary">
+          <i className="fa fa-plus"></i> Add New Dish
         </button>
       </div>
 
       {loading ? (
-        <div className="loading-notice">Loading menu items from database...</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "60px 20px" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "32px", color: "var(--primary)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>Loading Menu Items from PostgreSQL Database...</h4>
+        </div>
       ) : (
-        <div className="data-table-container">
+        <div className="admin-data-table-container">
           <table className="admin-data-table">
             <thead>
               <tr>
-                <th>Dish</th>
+                <th>Dish Details</th>
                 <th>Category</th>
                 <th>Price</th>
                 <th>Prep Time</th>
-                <th>Status</th>
-                <th>Featured</th>
+                <th>Availability</th>
+                <th>Specialty</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -258,59 +257,76 @@ export default function AdminMenu() {
               {items.map((item) => (
                 <tr key={item.id}>
                   <td>
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
                       <img
                         src={item.image_url}
                         alt={item.name}
-                        style={{ width: "42px", height: "42px", borderRadius: "6px", objectFit: "cover" }}
+                        style={{
+                          width: "48px",
+                          height: "48px",
+                          borderRadius: "50%",
+                          objectFit: "cover",
+                          border: "2px solid var(--primary)",
+                          boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+                        }}
                         onError={(e) => { e.target.src = "/images/choma.jpg"; }}
                       />
                       <div>
-                        <div style={{ fontWeight: "700", color: "#fff" }}>{item.name}</div>
-                        <div style={{ fontSize: "11px", color: "#888", maxWidth: "250px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        <div style={{ fontWeight: "800", color: "var(--secondary)", fontFamily: "Nunito, sans-serif", fontSize: "14.5px" }}>
+                          {item.name}
+                        </div>
+                        <div style={{ fontSize: "12px", color: "var(--gray)", maxWidth: "260px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                           {item.description}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <span style={{ background: "#222", padding: "3px 8px", borderRadius: "4px", fontSize: "12px" }}>
+                    <span style={{ background: "var(--light-bg)", border: "1px solid var(--light-gray)", padding: "4px 10px", borderRadius: "6px", fontSize: "12px", fontWeight: "700", color: "var(--secondary)" }}>
                       {item.category}
                     </span>
                   </td>
-                  <td style={{ fontWeight: "800", color: "#ffcc00" }}>
+                  <td style={{ fontWeight: "900", color: "var(--primary-dark)", fontFamily: "Nunito, sans-serif", fontSize: "15px" }}>
                     KES {Number(item.price).toFixed(2)}
                   </td>
-                  <td style={{ color: "#aaa" }}>{item.prep_time_minutes || 15} mins</td>
+                  <td style={{ color: "var(--gray)", fontSize: "13px" }}>
+                    <i className="fa fa-clock" style={{ color: "var(--primary)", marginRight: "4px" }}></i>
+                    {item.prep_time_minutes || 15} mins
+                  </td>
                   <td>
                     <button
                       onClick={() => handleToggleAvailability(item.id)}
-                      className={`btn-action-sm ${item.is_available !== false ? "btn-action-green" : "btn-action-red"}`}
-                      style={{ fontSize: "11px" }}
+                      className={`status-badge ${item.is_available !== false ? "status-completed" : "status-cancelled"}`}
+                      style={{ cursor: "pointer", border: "none" }}
+                      title="Click to toggle availability"
                     >
+                      <i className={`fa ${item.is_available !== false ? "fa-check" : "fa-ban"}`}></i>
                       {item.is_available !== false ? "Available" : "Sold Out"}
                     </button>
                   </td>
                   <td>
                     {item.is_featured ? (
-                      <span style={{ color: "#ffcc00", fontWeight: "700", fontSize: "12px" }}>Yes</span>
+                      <span className="status-badge status-pending" style={{ fontWeight: "800" }}>
+                        <i className="fa fa-star" style={{ color: "var(--primary-dark)" }}></i> Featured
+                      </span>
                     ) : (
-                      <span style={{ color: "#666", fontSize: "12px" }}>No</span>
+                      <span style={{ color: "var(--gray)", fontSize: "12px" }}>Standard</span>
                     )}
                   </td>
                   <td>
-                    <div style={{ display: "flex", gap: "6px" }}>
+                    <div style={{ display: "flex", gap: "8px" }}>
                       <button
                         onClick={() => handleOpenEdit(item)}
-                        className="btn-action-sm btn-action-dark"
+                        className="btn-restoran-secondary"
+                        style={{ padding: "6px 12px", fontSize: "12px" }}
                       >
-                        Edit
+                        <i className="fa fa-edit"></i> Edit
                       </button>
                       <button
                         onClick={() => handleDelete(item.id, item.name)}
-                        className="btn-action-sm btn-action-red"
+                        className="btn-restoran-danger"
                       >
-                        Delete
+                        <i className="fa fa-trash"></i> Delete
                       </button>
                     </div>
                   </td>
@@ -323,47 +339,55 @@ export default function AdminMenu() {
 
       {/* Add / Edit Menu Modal */}
       {isNewModalOpen && (
-        <div className="modal-backdrop" onClick={() => setIsNewModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{editingItem ? "Edit Menu Dish" : "Add New Dish"}</h2>
+        <div className="admin-modal-overlay" onClick={() => setIsNewModalOpen(false)}>
+          <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <i className="fa fa-utensils" style={{ color: "var(--primary)", fontSize: "20px" }}></i>
+                <h3 className="admin-modal-title">
+                  {editingItem ? "Edit Menu Dish" : "Create New Menu Dish"}
+                </h3>
+              </div>
+              <button
+                onClick={() => setIsNewModalOpen(false)}
+                className="admin-modal-close"
+              >
+                ✕
+              </button>
+            </div>
+
             <form onSubmit={handleSubmit}>
-              <div className="form-input-group">
-                <label>Dish Name *</label>
+              <div style={{ marginBottom: "16px" }}>
+                <label className="restoran-label">Dish Name *</label>
                 <input
                   type="text"
                   required
+                  className="restoran-input"
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  placeholder="e.g. Nyama Choma Platter"
+                  placeholder="e.g. Swahili Biryani Special"
                 />
               </div>
 
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
-                <div className="form-input-group">
-                  <label>Price (KES) *</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
+                <div>
+                  <label className="restoran-label">Price (KES) *</label>
                   <input
                     type="number"
                     step="0.01"
                     required
+                    className="restoran-input"
                     value={formData.price}
                     onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                     placeholder="850"
                   />
                 </div>
-                <div className="form-input-group">
-                  <label>Category (from Database)</label>
+                <div>
+                  <label className="restoran-label">Category</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    style={{
-                      width: "100%",
-                      padding: "10px 12px",
-                      borderRadius: "6px",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      background: "#1a1a1a",
-                      color: "#fff",
-                      fontSize: "14px",
-                    }}
+                    className="restoran-select"
                   >
                     {categories.map((c) => (
                       <option key={c} value={c}>
@@ -374,10 +398,11 @@ export default function AdminMenu() {
                 </div>
               </div>
 
-              <div className="form-input-group">
-                <label>Preparation Time (Minutes)</label>
+              <div style={{ marginBottom: "16px" }}>
+                <label className="restoran-label">Estimated Preparation Time (Minutes)</label>
                 <input
                   type="number"
+                  className="restoran-input"
                   value={formData.prep_time_minutes}
                   onChange={(e) => setFormData({ ...formData, prep_time_minutes: e.target.value })}
                   placeholder="15"
@@ -385,17 +410,18 @@ export default function AdminMenu() {
               </div>
 
               {/* Image Upload Component */}
-              <div className="form-input-group">
+              <div style={{ marginBottom: "18px" }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
-                  <label style={{ margin: 0, fontWeight: "700" }}>Dish Photo / Image</label>
+                  <label className="restoran-label" style={{ margin: 0 }}>Dish Photo / Image</label>
                   <button
                     type="button"
                     onClick={() => setShowUrlFallback(!showUrlFallback)}
                     style={{
                       background: "none",
                       border: "none",
-                      color: "var(--color-accent, #c96b32)",
+                      color: "var(--primary)",
                       fontSize: "12px",
+                      fontWeight: "700",
                       cursor: "pointer",
                       textDecoration: "underline",
                       padding: 0,
@@ -412,23 +438,14 @@ export default function AdminMenu() {
                       value={formData.image_url}
                       onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
                       placeholder="/images/choma.jpg or https://..."
-                      style={{
-                        width: "100%",
-                        padding: "10px 12px",
-                        borderRadius: "8px",
-                        border: "1.5px solid var(--color-border)",
-                        background: "#fff",
-                        color: "#1d1916",
-                        fontSize: "14px",
-                      }}
+                      className="restoran-input"
                     />
-                    <p style={{ fontSize: "11px", color: "#888", marginTop: "4px" }}>
-                      Tip: You can use relative paths like <code>/images/choma.jpg</code> or uploaded URLs.
+                    <p style={{ fontSize: "11.5px", color: "var(--gray)", marginTop: "4px" }}>
+                      Tip: You can use local paths like <code>/images/choma.jpg</code> or external image URLs.
                     </p>
                   </div>
                 ) : (
                   <div>
-                    {/* Hidden file input */}
                     <input
                       ref={fileInputRef}
                       type="file"
@@ -441,7 +458,6 @@ export default function AdminMenu() {
                       }}
                     />
 
-                    {/* Drag and Drop & Preview Area */}
                     <div
                       onDragEnter={handleDrag}
                       onDragOver={handleDrag}
@@ -449,13 +465,13 @@ export default function AdminMenu() {
                       onDrop={handleDrop}
                       style={{
                         border: dragActive
-                          ? "2px dashed var(--color-accent, #c96b32)"
-                          : "2px dashed rgba(201, 107, 50, 0.4)",
+                          ? "2px dashed var(--primary)"
+                          : "2px dashed rgba(212, 167, 74, 0.4)",
                         backgroundColor: dragActive
-                          ? "rgba(201, 107, 50, 0.1)"
-                          : "var(--color-surface-soft, #f8f4ee)",
+                          ? "rgba(212, 167, 74, 0.1)"
+                          : "var(--light-bg)",
                         borderRadius: "12px",
-                        padding: "14px",
+                        padding: "16px",
                         transition: "all 0.2s ease",
                       }}
                     >
@@ -467,14 +483,13 @@ export default function AdminMenu() {
                           flexWrap: "wrap",
                         }}
                       >
-                        {/* Image Preview Thumbnail */}
                         <div
                           style={{
-                            width: "72px",
-                            height: "72px",
+                            width: "74px",
+                            height: "74px",
                             borderRadius: "10px",
                             overflow: "hidden",
-                            border: "1.5px solid var(--color-border-strong, #d6cbc0)",
+                            border: "2px solid var(--primary)",
                             flexShrink: 0,
                             backgroundColor: "#171412",
                             position: "relative",
@@ -513,54 +528,51 @@ export default function AdminMenu() {
                           )}
                         </div>
 
-                        {/* Actions & Notes */}
                         <div style={{ flex: "1 1 200px" }}>
                           <div style={{ display: "flex", gap: "8px", flexWrap: "wrap", marginBottom: "6px" }}>
                             <button
                               type="button"
                               disabled={uploadingImage}
                               onClick={() => fileInputRef.current?.click()}
-                              className="btn-action-sm btn-action-primary"
+                              className="btn-restoran-primary"
                               style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                gap: "6px",
+                                padding: "6px 14px",
+                                fontSize: "12px",
                                 cursor: uploadingImage ? "not-allowed" : "pointer",
                                 opacity: uploadingImage ? 0.7 : 1,
                               }}
                             >
-                              📁 {uploadingImage ? "Uploading..." : "Upload from Computer"}
+                              <i className="fa fa-folder-open"></i> {uploadingImage ? "Uploading..." : "Upload Photo"}
                             </button>
 
                             {formData.image_url && formData.image_url !== "/images/choma.jpg" && (
                               <button
                                 type="button"
                                 onClick={() => setFormData({ ...formData, image_url: "/images/choma.jpg" })}
-                                className="btn-action-sm btn-action-dark"
-                                style={{ fontSize: "11px" }}
+                                className="btn-restoran-secondary"
+                                style={{ padding: "6px 10px", fontSize: "11.5px" }}
                               >
                                 Reset Default
                               </button>
                             )}
                           </div>
 
-                          <div style={{ fontSize: "12px", color: "var(--color-text-muted, #756d66)" }}>
+                          <div style={{ fontSize: "12px", color: "var(--gray)" }}>
                             Drag and drop an image file here, or click to browse.
                           </div>
-                          <div style={{ fontSize: "11px", color: "#9e958d", marginTop: "2px" }}>
+                          <div style={{ fontSize: "11px", color: "var(--gray)", marginTop: "2px" }}>
                             Formats: <strong>JPEG, PNG, WebP</strong> (Max 5MB)
                           </div>
                         </div>
                       </div>
 
-                      {/* Error Message */}
                       {uploadError && (
                         <div
                           style={{
                             marginTop: "10px",
                             padding: "8px 12px",
-                            background: "rgba(184, 76, 67, 0.12)",
-                            color: "#b84c43",
+                            background: "#FEE2E2",
+                            color: "#B91C1C",
                             borderRadius: "6px",
                             fontSize: "12px",
                             fontWeight: "600",
@@ -574,26 +586,28 @@ export default function AdminMenu() {
                 )}
               </div>
 
-              <div className="form-input-group">
-                <label>Description & Ingredients</label>
+              <div style={{ marginBottom: "18px" }}>
+                <label className="restoran-label">Description & Ingredients</label>
                 <textarea
                   rows="3"
-                  className="custom-textarea"
+                  className="restoran-textarea"
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Describe the dish flavors and sides..."
+                  placeholder="Describe the dish flavours, marination, and sides..."
                 />
               </div>
 
-              <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "16px 0" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "10px", margin: "18px 0" }}>
                 <input
                   type="checkbox"
                   id="is_featured"
                   checked={formData.is_featured}
                   onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
+                  style={{ width: "18px", height: "18px", accentColor: "var(--primary)", cursor: "pointer" }}
                 />
-                <label htmlFor="is_featured" style={{ fontSize: "14px", color: "#ffcc00", cursor: "pointer" }}>
-                  Mark as Chef's Featured Specialty
+                <label htmlFor="is_featured" style={{ fontSize: "14px", fontWeight: "700", color: "var(--secondary)", cursor: "pointer" }}>
+                  <i className="fa fa-crown" style={{ color: "var(--primary)", marginRight: "6px" }}></i>
+                  Highlight as Chef's Featured Specialty
                 </label>
               </div>
 
@@ -601,12 +615,12 @@ export default function AdminMenu() {
                 <button
                   type="button"
                   onClick={() => setIsNewModalOpen(false)}
-                  className="btn-action-sm btn-action-dark"
+                  className="btn-restoran-secondary"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn-action-sm btn-action-primary">
-                  {editingItem ? "Save Changes" : "Create Dish"}
+                <button type="submit" className="btn-restoran-primary">
+                  <i className="fa fa-save"></i> {editingItem ? "Save Changes" : "Create Dish"}
                 </button>
               </div>
             </form>

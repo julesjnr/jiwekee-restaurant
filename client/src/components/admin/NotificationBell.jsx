@@ -42,71 +42,33 @@ export default function NotificationBell() {
     <div style={{ position: "relative" }} ref={dropdownRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        style={{
-          background: "#1e1e1e",
-          border: "1px solid rgba(255,255,255,0.15)",
-          borderRadius: "8px",
-          padding: "8px 12px",
-          color: "#fff",
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "14px",
-        }}
+        className="notif-btn"
       >
+        <i className="fa fa-bell" style={{ color: "var(--primary)" }}></i>
         Alerts
         {unreadCount > 0 && (
-          <span
-            style={{
-              background: "#ff4d4d",
-              color: "#fff",
-              borderRadius: "10px",
-              padding: "2px 6px",
-              fontSize: "11px",
-              fontWeight: "700",
-            }}
-          >
+          <span className="notif-badge">
             {unreadCount}
           </span>
         )}
       </button>
 
       {isOpen && (
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            top: "44px",
-            width: "360px",
-            background: "#181818",
-            border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: "12px",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.6)",
-            zIndex: 1000,
-            overflow: "hidden",
-          }}
-        >
-          <div
-            style={{
-              padding: "12px 16px",
-              borderBottom: "1px solid rgba(255,255,255,0.08)",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ fontWeight: "700", fontSize: "14px", color: "#fff" }}>
-              Restaurant Alerts
-            </span>
+        <div className="notif-dropdown-card">
+          <div className="notif-dropdown-header">
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              <i className="fa fa-bell" style={{ color: "var(--primary)" }}></i>
+              <h5>Restaurant Live Alerts</h5>
+            </div>
             {unreadCount > 0 && (
               <button
                 onClick={handleMarkAllRead}
                 style={{
                   background: "none",
                   border: "none",
-                  color: "#ffcc00",
+                  color: "var(--primary)",
                   fontSize: "12px",
+                  fontWeight: "800",
                   cursor: "pointer",
                 }}
               >
@@ -115,20 +77,17 @@ export default function NotificationBell() {
             )}
           </div>
 
-          <div style={{ maxHeight: "360px", overflowY: "auto" }}>
+          <div style={{ maxHeight: "380px", overflowY: "auto" }}>
             {notifications.length === 0 ? (
-              <div style={{ padding: "20px", textAlign: "center", color: "#888", fontSize: "13px" }}>
+              <div style={{ padding: "30px 20px", textAlign: "center", color: "var(--gray)", fontSize: "13.5px" }}>
+                <i className="fa fa-check-circle" style={{ color: "var(--color-success)", fontSize: "24px", display: "block", marginBottom: "8px" }}></i>
                 No active notifications
               </div>
             ) : (
               notifications.map((n) => (
                 <div
                   key={n.id}
-                  style={{
-                    padding: "12px 16px",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    background: n.is_read ? "transparent" : "rgba(255,204,0,0.05)",
-                  }}
+                  className={`notif-item ${!n.is_read ? "unread" : ""}`}
                 >
                   <div
                     style={{
@@ -138,14 +97,14 @@ export default function NotificationBell() {
                       marginBottom: "4px",
                     }}
                   >
-                    <span style={{ fontWeight: "700", fontSize: "13px", color: "#ffcc00" }}>
+                    <span style={{ fontWeight: "800", fontSize: "13.5px", color: "var(--secondary)", fontFamily: "Nunito, sans-serif" }}>
                       {n.title}
                     </span>
-                    <span style={{ fontSize: "11px", color: "#666" }}>
+                    <span style={{ fontSize: "11px", color: "var(--gray)" }}>
                       {new Date(n.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
-                  <p style={{ fontSize: "12px", color: "#bbb", margin: 0 }}>{n.message}</p>
+                  <p style={{ fontSize: "12.5px", color: "var(--secondary)", margin: 0, opacity: 0.85 }}>{n.message}</p>
                 </div>
               ))
             )}

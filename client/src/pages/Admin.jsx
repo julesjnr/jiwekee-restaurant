@@ -16,25 +16,33 @@ import AdminStaff from "../components/admin/AdminStaff";
 import AdminAudit from "../components/admin/AdminAudit";
 
 const ALL_TABS = [
-  { id: "overview", label: "Overview", roles: ["owner", "manager"], aliases: ["dashboard"] },
-  { id: "orders", label: "Orders & Fulfillment", roles: ["owner", "manager", "cashier", "waiter"], aliases: [] },
-  { id: "kds", label: "Kitchen KDS", roles: ["owner", "manager", "kitchen"], aliases: ["kitchen"] },
-  { id: "menu", label: "Menu Management", roles: ["owner", "manager"], aliases: [] },
-  { id: "tables", label: "Floor & Tables", roles: ["owner", "manager", "waiter"], aliases: [] },
-  { id: "reservations", label: "Reservations Desk", roles: ["owner", "manager", "waiter"], aliases: [] },
-  { id: "inventory", label: "Stock & Inventory", roles: ["owner", "manager"], aliases: [] },
-  { id: "crm", label: "CRM & Loyalty", roles: ["owner", "manager"], aliases: ["customers", "loyalty"] },
-  { id: "reconciliation", label: "Payments & Reconciliation", roles: ["owner", "manager", "cashier", "accountant"], aliases: ["payments"] },
-  { id: "reports", label: "Reports & KPIs", roles: ["owner", "manager", "accountant"], aliases: [] },
-  { id: "staff", label: "Staff & Roles", roles: ["owner"], aliases: [] },
-  { id: "audit", label: "Audit Trail", roles: ["owner", "manager", "accountant"], aliases: ["activity"] },
+  { id: "overview", label: "Overview", icon: "fa-chart-pie", roles: ["owner", "manager"], aliases: ["dashboard"] },
+  { id: "orders", label: "Orders & Fulfillment", icon: "fa-receipt", roles: ["owner", "manager", "cashier", "waiter"], aliases: [] },
+  { id: "kds", label: "Kitchen KDS", icon: "fa-fire", roles: ["owner", "manager", "kitchen"], aliases: ["kitchen"] },
+  { id: "menu", label: "Menu Management", icon: "fa-utensils", roles: ["owner", "manager"], aliases: [] },
+  { id: "tables", label: "Floor & Tables", icon: "fa-chair", roles: ["owner", "manager", "waiter"], aliases: [] },
+  { id: "reservations", label: "Reservations Desk", icon: "fa-calendar-check", roles: ["owner", "manager", "waiter"], aliases: [] },
+  { id: "inventory", label: "Stock & Inventory", icon: "fa-boxes", roles: ["owner", "manager"], aliases: [] },
+  { id: "crm", label: "CRM & Loyalty", icon: "fa-users", roles: ["owner", "manager"], aliases: ["customers", "loyalty"] },
+  { id: "reconciliation", label: "Payments & Ledger", icon: "fa-file-invoice-dollar", roles: ["owner", "manager", "cashier", "accountant"], aliases: ["payments"] },
+  { id: "reports", label: "Reports & KPIs", icon: "fa-chart-line", roles: ["owner", "manager", "accountant"], aliases: [] },
+  { id: "staff", label: "Staff & Roles", icon: "fa-user-shield", roles: ["owner"], aliases: [] },
+  { id: "audit", label: "Audit Trail", icon: "fa-history", roles: ["owner", "manager", "accountant"], aliases: ["activity"] },
 ];
 
 export default function Admin() {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const params = useParams();
   const [searchParams] = useSearchParams();
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const userRole = (user?.role || (user?.is_admin ? "owner" : "customer")).toLowerCase();
 
@@ -79,7 +87,16 @@ export default function Admin() {
   }, [user, navigate]);
 
   if (!user) {
-    return <div className="loading-notice">Verifying administrative credentials...</div>;
+    return (
+      <div className="admin-page-container" style={{ textAlign: "center", padding: "80px 20px" }}>
+        <div style={{ fontSize: "36px", color: "var(--primary)", marginBottom: "16px" }}>
+          <i className="fa fa-spinner fa-spin"></i>
+        </div>
+        <h3 style={{ fontFamily: "Nunito, sans-serif", fontWeight: 800, color: "var(--secondary)" }}>
+          Authenticating Administrative Credentials...
+        </h3>
+      </div>
+    );
   }
 
   function handleTabClick(tabId) {
@@ -89,44 +106,66 @@ export default function Admin() {
 
   return (
     <div className="admin-page-container">
-      {/* Top Header */}
+      {/* Top Header - Restoran Style */}
       <div className="admin-header">
-        <div>
-          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <h1 style={{ color: "#fff", fontSize: "24px", fontWeight: "800" }}>
-              Jiwekee Operations Hub
-            </h1>
-            <span
-              style={{
-                background: "linear-gradient(135deg, #ffcc00 0%, #ff9900 100%)",
-                color: "#111",
-                padding: "3px 10px",
-                borderRadius: "12px",
-                fontSize: "12px",
-                fontWeight: "800",
-                textTransform: "uppercase",
-              }}
-            >
-              {userRole}
-            </span>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <div
+            style={{
+              width: "50px",
+              height: "50px",
+              borderRadius: "12px",
+              background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#FFFFFF",
+              fontSize: "24px",
+              boxShadow: "0 4px 15px rgba(212, 167, 74, 0.4)",
+            }}
+          >
+            <i className="fa fa-utensils"></i>
           </div>
-          <p style={{ color: "#888", fontSize: "14px", marginTop: "4px" }}>
-            Logged in as <strong>{user.name}</strong> ({user.email})
-          </p>
+
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
+              <h1 className="admin-header-title">
+                Jiwekee Operations Hub
+              </h1>
+              <span className="admin-role-badge">
+                <i className="fa fa-shield-alt" style={{ marginRight: "4px" }}></i>
+                {userRole}
+              </span>
+            </div>
+            <p className="admin-header-subtitle">
+              Active Staff: <strong>{user.name}</strong> ({user.email}) • <span style={{ color: "var(--primary)" }}>● Live System ({currentTime})</span>
+            </p>
+          </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "12px", flexWrap: "wrap" }}>
           <NotificationBell />
           <button
             onClick={() => navigate("/menu")}
-            className="btn-action-sm btn-action-dark"
+            className="btn-restoran-secondary"
+            style={{ background: "rgba(255, 255, 255, 0.1)", color: "#FFFFFF", borderColor: "rgba(255, 255, 255, 0.2)" }}
           >
-            ← View Customer Menu
+            <i className="fa fa-arrow-left"></i> Customer Menu
+          </button>
+          <button
+            onClick={async () => {
+              if (logout) await logout();
+              navigate("/admin-login");
+            }}
+            className="btn-restoran-secondary"
+            style={{ background: "rgba(239, 68, 68, 0.15)", color: "#FCA5A5", borderColor: "rgba(239, 68, 68, 0.3)" }}
+            title="Sign out of staff session"
+          >
+            <i className="fa fa-sign-out-alt"></i> Sign Out
           </button>
         </div>
       </div>
 
-      {/* Tabs Navigation (Role-Filtered) */}
+      {/* Tabs Navigation (Role-Filtered with Icons) */}
       <div className="admin-tabs-nav">
         {allowedTabs.map((tab) => (
           <button
@@ -134,6 +173,7 @@ export default function Admin() {
             onClick={() => handleTabClick(tab.id)}
             className={`admin-tab-btn ${activeTab === tab.id ? "active" : ""}`}
           >
+            <i className={`fa ${tab.icon || "fa-circle"}`}></i>
             {tab.label}
           </button>
         ))}

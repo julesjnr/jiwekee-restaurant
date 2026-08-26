@@ -61,50 +61,52 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+      {/* Filters and Search Bar */}
+      <div className="admin-filter-bar">
+        <div className="admin-pill-group">
           {STAGES.map((st) => (
             <button
               key={st}
               onClick={() => setStageFilter(st)}
-              className={`category-pill ${stageFilter === st ? "active" : ""}`}
-              style={{ fontSize: "12px", padding: "6px 12px" }}
+              className={`admin-pill-btn ${stageFilter === st ? "active" : ""}`}
             >
               {st}
             </button>
           ))}
         </div>
 
-        <form onSubmit={handleSearchSubmit} style={{ display: "flex", gap: "8px" }}>
+        <form onSubmit={handleSearchSubmit} className="admin-search-wrap">
+          <i className="fa fa-search"></i>
           <input
             type="text"
             placeholder="Search order #, customer, table..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="custom-input"
-            style={{ width: "240px", margin: 0 }}
+            className="admin-search-input"
           />
-          <button type="submit" className="btn-action-sm btn-action-primary">
+          <button
+            type="submit"
+            className="btn-restoran-primary"
+            style={{ marginLeft: "8px", padding: "8px 16px" }}
+          >
             Filter
           </button>
         </form>
       </div>
 
       {loading ? (
-        <div className="loading-notice">Loading active restaurant orders...</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "50px 20px" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "28px", color: "var(--primary)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>Loading active restaurant orders...</h4>
+        </div>
       ) : orders.length === 0 ? (
-        <div className="no-items-card">No orders found matching the filter.</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "50px 20px" }}>
+          <i className="fa fa-inbox" style={{ fontSize: "36px", color: "var(--gray)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>No orders found matching "{stageFilter}"</h4>
+          <p style={{ color: "var(--gray)", fontSize: "13px", marginTop: "6px" }}>Try selecting another filter stage or clear the search field.</p>
+        </div>
       ) : (
-        <div className="data-table-container">
+        <div className="admin-data-table-container">
           <table className="admin-data-table">
             <thead>
               <tr>
@@ -113,7 +115,7 @@ export default function AdminOrders() {
                 <th>Type & Location</th>
                 <th>Amount</th>
                 <th>Payment</th>
-                <th>Fulfillment Lifecycle</th>
+                <th>Fulfillment Stage</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -121,39 +123,47 @@ export default function AdminOrders() {
               {orders.map((o) => (
                 <tr key={o.id}>
                   <td>
-                    <span style={{ fontWeight: "800", color: "#ffcc00" }}>#{o.id}</span>
-                    <div style={{ fontSize: "11px", color: "#777" }}>
-                      {new Date(o.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                    <span style={{ fontWeight: "900", color: "var(--primary-dark)", fontFamily: "Nunito, sans-serif", fontSize: "15px" }}>
+                      #{o.id}
+                    </span>
+                    <div style={{ fontSize: "11px", color: "var(--gray)", marginTop: "2px" }}>
+                      {new Date(o.created_at).toLocaleDateString([], { month: "short", day: "numeric" })} • {new Date(o.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </div>
                   </td>
                   <td>
-                    <div style={{ fontWeight: "600", color: "#fff" }}>{o.user_name || "Customer"}</div>
-                    <div style={{ fontSize: "12px", color: "#888" }}>{o.phone_number || "—"}</div>
+                    <div style={{ fontWeight: "700", color: "var(--secondary)" }}>{o.user_name || "Guest Customer"}</div>
+                    <div style={{ fontSize: "12px", color: "var(--gray)", marginTop: "2px" }}>
+                      <i className="fa fa-phone" style={{ fontSize: "10px", marginRight: "4px" }}></i>
+                      {o.phone_number || "—"}
+                    </div>
                   </td>
                   <td>
                     <span
                       style={{
-                        background: "#222",
-                        padding: "3px 8px",
+                        background: "var(--light-bg)",
+                        padding: "3px 9px",
                         borderRadius: "4px",
-                        fontSize: "11px",
+                        fontSize: "11.5px",
                         fontWeight: "700",
+                        color: "var(--secondary)",
+                        border: "1px solid var(--light-gray)",
                       }}
                     >
                       {o.order_type}
                     </span>
                     {o.table_number && (
-                      <div style={{ fontSize: "12px", color: "#ffcc00", marginTop: "3px" }}>
-                        Table {o.table_number}
+                      <div style={{ fontSize: "12px", color: "var(--primary-dark)", fontWeight: "700", marginTop: "4px" }}>
+                        <i className="fa fa-chair" style={{ marginRight: "4px" }}></i> Table {o.table_number}
                       </div>
                     )}
                     {o.delivery_address && (
-                      <div style={{ fontSize: "11px", color: "#aaa", marginTop: "3px", maxWidth: "200px" }}>
+                      <div style={{ fontSize: "11.5px", color: "var(--gray)", marginTop: "4px", maxWidth: "200px" }}>
+                        <i className="fa fa-map-marker-alt" style={{ marginRight: "4px" }}></i>
                         {o.delivery_address}
                       </div>
                     )}
                   </td>
-                  <td style={{ fontWeight: "700", color: "#fff" }}>
+                  <td style={{ fontWeight: "800", color: "var(--secondary)", fontFamily: "Nunito, sans-serif", fontSize: "15px" }}>
                     KES {Number(o.amount).toFixed(2)}
                   </td>
                   <td>
@@ -161,8 +171,8 @@ export default function AdminOrders() {
                       {o.status} ({o.payment_method})
                     </span>
                     {o.mpesa_receipt && (
-                      <div style={{ fontSize: "11px", color: "#888", marginTop: "2px" }}>
-                        Ref: {o.mpesa_receipt}
+                      <div style={{ fontSize: "11px", color: "var(--gray)", marginTop: "3px" }}>
+                        Ref: <strong>{o.mpesa_receipt}</strong>
                       </div>
                     )}
                   </td>
@@ -170,14 +180,12 @@ export default function AdminOrders() {
                     <select
                       value={o.fulfillment_status || "Confirmed"}
                       onChange={(e) => handleUpdateStatus(o.id, e.target.value)}
+                      className="restoran-select"
                       style={{
-                        background: "#222",
-                        color: "#ffcc00",
-                        border: "1px solid rgba(255,255,255,0.2)",
-                        borderRadius: "6px",
-                        padding: "4px 8px",
-                        fontSize: "12px",
-                        fontWeight: "600",
+                        padding: "5px 10px",
+                        fontSize: "12.5px",
+                        fontWeight: "700",
+                        width: "auto",
                         cursor: "pointer",
                       }}
                     >
@@ -193,9 +201,10 @@ export default function AdminOrders() {
                   <td>
                     <button
                       onClick={() => setSelectedOrder(o)}
-                      className="btn-action-sm btn-action-dark"
+                      className="btn-restoran-secondary"
+                      style={{ padding: "6px 12px", fontSize: "12px" }}
                     >
-                      View Items ({o.items?.length || 1})
+                      <i className="fa fa-eye"></i> Items ({o.items?.length || 1})
                     </button>
                   </td>
                 </tr>
@@ -207,35 +216,40 @@ export default function AdminOrders() {
 
       {/* Order Item Details Modal */}
       {selectedOrder && (
-        <div className="modal-backdrop" onClick={() => setSelectedOrder(null)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginBottom: "16px",
-              }}
-            >
-              <h2>Order #{selectedOrder.id} Details</h2>
+        <div className="admin-modal-overlay" onClick={() => setSelectedOrder(null)}>
+          <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <i className="fa fa-receipt" style={{ color: "var(--primary)", fontSize: "22px" }}></i>
+                <h3 className="admin-modal-title">Order #{selectedOrder.id} Details</h3>
+              </div>
               <button
                 onClick={() => setSelectedOrder(null)}
-                style={{ background: "none", border: "none", color: "#888", fontSize: "18px", cursor: "pointer" }}
+                className="admin-modal-close"
               >
                 ✕
               </button>
             </div>
 
-            <div style={{ marginBottom: "16px", fontSize: "13px", color: "#bbb" }}>
-              <div><strong>Customer:</strong> {selectedOrder.user_name} ({selectedOrder.phone_number || "No phone"})</div>
-              <div><strong>Order Type:</strong> {selectedOrder.order_type} {selectedOrder.table_number ? `(Table ${selectedOrder.table_number})` : ""}</div>
-              {selectedOrder.delivery_address && <div><strong>Address:</strong> {selectedOrder.delivery_address}</div>}
-              {selectedOrder.notes && <div><strong>Special Cooking Notes:</strong> <span style={{ color: "#ffcc00" }}>"{selectedOrder.notes}"</span></div>}
-              <div><strong>Payment:</strong> {selectedOrder.payment_method} ({selectedOrder.status})</div>
+            <div style={{ marginBottom: "20px", fontSize: "13.5px", color: "var(--secondary)", background: "var(--light-bg)", padding: "16px", borderRadius: "10px", border: "1px solid var(--light-gray)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "8px" }}>
+                <div><strong>Customer:</strong> {selectedOrder.user_name || "Guest"}</div>
+                <div><strong>Phone:</strong> {selectedOrder.phone_number || "—"}</div>
+                <div><strong>Order Type:</strong> {selectedOrder.order_type} {selectedOrder.table_number ? `(Table ${selectedOrder.table_number})` : ""}</div>
+                <div><strong>Payment:</strong> <span className={`status-badge status-${selectedOrder.status.toLowerCase()}`}>{selectedOrder.status} ({selectedOrder.payment_method})</span></div>
+              </div>
+              {selectedOrder.delivery_address && <div style={{ marginTop: "8px" }}><strong>Delivery Address:</strong> {selectedOrder.delivery_address}</div>}
+              {selectedOrder.notes && (
+                <div style={{ marginTop: "8px", background: "rgba(212, 167, 74, 0.12)", padding: "8px 12px", borderRadius: "6px", border: "1px solid rgba(212, 167, 74, 0.3)" }}>
+                  <strong style={{ color: "var(--primary-dark)" }}>Chef Cooking Notes:</strong> "{selectedOrder.notes}"
+                </div>
+              )}
             </div>
 
-            <h3 style={{ fontSize: "14px", color: "#fff", marginBottom: "8px" }}>Ordered Dishes:</h3>
-            <div style={{ background: "#222", borderRadius: "8px", padding: "12px", marginBottom: "16px" }}>
+            <h4 style={{ fontFamily: "Nunito, sans-serif", fontSize: "16px", fontWeight: "800", color: "var(--secondary)", marginBottom: "10px" }}>
+              Ordered Items:
+            </h4>
+            <div style={{ background: "#FFFFFF", border: "1px solid var(--light-gray)", borderRadius: "10px", padding: "14px", marginBottom: "20px" }}>
               {selectedOrder.items && selectedOrder.items.length > 0 ? (
                 selectedOrder.items.map((item, idx) => (
                   <div
@@ -243,28 +257,45 @@ export default function AdminOrders() {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
-                      padding: "6px 0",
-                      borderBottom: "1px solid rgba(255,255,255,0.05)",
-                      fontSize: "13px",
+                      alignItems: "center",
+                      padding: "8px 0",
+                      borderBottom: "1px solid var(--light-gray)",
+                      fontSize: "13.5px",
                     }}
                   >
-                    <span>
-                      <strong style={{ color: "#ffcc00" }}>{item.quantity}x</strong> {item.name}
+                    <span style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <span
+                        style={{
+                          background: "rgba(212, 167, 74, 0.15)",
+                          color: "var(--primary-dark)",
+                          fontWeight: "800",
+                          padding: "2px 8px",
+                          borderRadius: "4px",
+                          fontSize: "12px",
+                        }}
+                      >
+                        {item.quantity}x
+                      </span>
+                      <strong style={{ color: "var(--secondary)" }}>{item.name}</strong>
                     </span>
-                    <span>KES {(item.unit_price * item.quantity).toFixed(2)}</span>
+                    <span style={{ fontWeight: "700", color: "var(--secondary)" }}>
+                      KES {(item.unit_price * item.quantity).toFixed(2)}
+                    </span>
                   </div>
                 ))
               ) : (
-                <p style={{ color: "#888", fontSize: "12px" }}>Meal item details recorded.</p>
+                <p style={{ color: "var(--gray)", fontSize: "13px", margin: 0 }}>Recorded order items</p>
               )}
               <div
                 style={{
                   display: "flex",
                   justifyContent: "space-between",
-                  marginTop: "10px",
-                  fontWeight: "800",
-                  color: "#ffcc00",
-                  fontSize: "15px",
+                  marginTop: "12px",
+                  paddingTop: "10px",
+                  fontWeight: "900",
+                  color: "var(--primary-dark)",
+                  fontSize: "17px",
+                  fontFamily: "Nunito, sans-serif",
                 }}
               >
                 <span>Total Amount</span>
@@ -272,18 +303,18 @@ export default function AdminOrders() {
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "8px", justifyContent: "flex-end" }}>
+            <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
               {selectedOrder.fulfillment_status !== "Completed" && (
                 <button
                   onClick={() => handleUpdateStatus(selectedOrder.id, "Completed", "Paid")}
-                  className="btn-action-sm btn-action-green"
+                  className="btn-restoran-primary"
                 >
-                  Mark Completed & Paid
+                  <i className="fa fa-check"></i> Mark Completed & Paid
                 </button>
               )}
               <button
                 onClick={() => setSelectedOrder(null)}
-                className="btn-action-sm btn-action-dark"
+                className="btn-restoran-secondary"
               >
                 Close
               </button>

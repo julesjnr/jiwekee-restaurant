@@ -39,59 +39,82 @@ export default function AdminReconciliation() {
       {/* Top Ledger Stats */}
       <div className="metrics-grid">
         <div className="metric-card">
-          <div className="metric-title">Total Reconciled Revenue</div>
-          <div className="metric-value metric-highlight">
-            KES {Number(stats.totalRevenue || 0).toFixed(2)}
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Total Reconciled Revenue</div>
+              <div className="metric-value metric-highlight">
+                KES {Number(stats.totalRevenue || 0).toFixed(2)}
+              </div>
+            </div>
+            <div className="metric-icon-wrap">
+              <i className="fa fa-dollar-sign"></i>
+            </div>
           </div>
-          <div className="metric-subtitle">{stats.totalTransactions || 0} Total Transactions</div>
+          <div className="metric-subtitle">
+            <i className="fa fa-receipt" style={{ color: "var(--primary)" }}></i> {stats.totalTransactions || 0} Total Transactions
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">M-Pesa STK Gross</div>
-          <div className="metric-value metric-success">
-            KES {Number(stats.mpesaRevenue || 0).toFixed(2)}
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">M-Pesa STK Gross</div>
+              <div className="metric-value metric-success">
+                KES {Number(stats.mpesaRevenue || 0).toFixed(2)}
+              </div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(46, 125, 50, 0.12)", color: "var(--color-success)" }}>
+              <i className="fa fa-mobile-alt"></i>
+            </div>
           </div>
-          <div className="metric-subtitle">Safaricom Daraja API</div>
+          <div className="metric-subtitle">
+            <i className="fa fa-shield-alt" style={{ color: "var(--color-success)" }}></i> Safaricom Daraja STK
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">Loyalty Wallet Settlements</div>
-          <div className="metric-value metric-info">
-            KES {Number(stats.walletRevenue || 0).toFixed(2)}
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Wallet Settlements</div>
+              <div className="metric-value metric-info">
+                KES {Number(stats.walletRevenue || 0).toFixed(2)}
+              </div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(2, 132, 199, 0.12)", color: "var(--color-info)" }}>
+              <i className="fa fa-wallet"></i>
+            </div>
           </div>
-          <div className="metric-subtitle">In-App Customer Credits</div>
+          <div className="metric-subtitle">
+            <i className="fa fa-star" style={{ color: "var(--color-info)" }}></i> In-App Customer Credits
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">Pending Payment Inquiries</div>
-          <div className="metric-value">{stats.pendingCount || 0}</div>
-          <div className="metric-subtitle">Awaiting webhook or customer PIN</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Pending Settlements</div>
+              <div className="metric-value" style={{ color: stats.pendingCount ? "var(--color-warning)" : "var(--secondary)" }}>
+                {stats.pendingCount || 0}
+              </div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(217, 119, 6, 0.12)", color: "var(--color-warning)" }}>
+              <i className="fa fa-clock"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-hourglass-half"></i> Awaiting webhook verification
+          </div>
         </div>
       </div>
 
       {/* Filter and Search Bar */}
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          flexWrap: "wrap",
-          gap: "16px",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="admin-filter-bar">
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <select
             value={methodFilter}
             onChange={(e) => setMethodFilter(e.target.value)}
-            style={{
-              background: "#222",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: "8px",
-              padding: "8px 12px",
-              fontSize: "13px",
-            }}
+            className="restoran-select"
+            style={{ width: "auto", padding: "8px 14px", fontWeight: "700" }}
           >
             <option value="">All Payment Channels</option>
             <option value="mpesa">M-Pesa STK Push</option>
@@ -101,14 +124,8 @@ export default function AdminReconciliation() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            style={{
-              background: "#222",
-              color: "#fff",
-              border: "1px solid rgba(255,255,255,0.15)",
-              borderRadius: "8px",
-              padding: "8px 12px",
-              fontSize: "13px",
-            }}
+            className="restoran-select"
+            style={{ width: "auto", padding: "8px 14px", fontWeight: "700" }}
           >
             <option value="">All Statuses</option>
             <option value="Completed">Completed / Paid</option>
@@ -117,35 +134,47 @@ export default function AdminReconciliation() {
           </select>
         </div>
 
-        <form onSubmit={handleSearchSubmit} style={{ display: "flex", gap: "8px" }}>
+        <form onSubmit={handleSearchSubmit} className="admin-search-wrap">
+          <i className="fa fa-search"></i>
           <input
             type="text"
             placeholder="Search M-Pesa receipt, phone, name..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="custom-input"
-            style={{ width: "260px", margin: 0 }}
+            className="admin-search-input"
+            style={{ width: "260px" }}
           />
-          <button type="submit" className="btn-action-sm btn-action-primary">
+          <button
+            type="submit"
+            className="btn-restoran-primary"
+            style={{ marginLeft: "8px", padding: "8px 16px" }}
+          >
             Filter
           </button>
         </form>
       </div>
 
       {loading ? (
-        <div className="loading-notice">Loading financial reconciliation ledger...</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "60px 20px" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "32px", color: "var(--primary)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>Loading Financial Reconciliation Ledger...</h4>
+        </div>
       ) : transactions.length === 0 ? (
-        <div className="no-items-card">No matching transaction records found.</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "60px 20px" }}>
+          <i className="fa fa-file-invoice-dollar" style={{ fontSize: "36px", color: "var(--gray)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>No matching transaction records found</h4>
+          <p style={{ color: "var(--gray)", fontSize: "13px", marginTop: "6px" }}>Try choosing different filter criteria or clearing your search term.</p>
+        </div>
       ) : (
-        <div className="data-table-container">
+        <div className="admin-data-table-container">
           <table className="admin-data-table">
             <thead>
               <tr>
                 <th>Date & Time</th>
                 <th>Order #</th>
-                <th>Customer</th>
-                <th>Payment Method</th>
-                <th>Amount</th>
+                <th>Customer Details</th>
+                <th>Channel</th>
+                <th>Settled Amount</th>
                 <th>M-Pesa / Reference Receipt</th>
                 <th>Checkout ID</th>
                 <th>Status</th>
@@ -154,47 +183,58 @@ export default function AdminReconciliation() {
             <tbody>
               {transactions.map((t, idx) => (
                 <tr key={idx}>
-                  <td style={{ color: "#888", fontSize: "12px" }}>
-                    {new Date(t.created_at).toLocaleString()}
+                  <td style={{ color: "var(--gray)", fontSize: "12.5px" }}>
+                    {new Date(t.created_at).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
                   </td>
-                  <td style={{ fontWeight: "700", color: "#ffcc00" }}>#{t.order_id}</td>
                   <td>
-                    <div style={{ fontWeight: "600", color: "#fff" }}>{t.customer_name}</div>
-                    <div style={{ fontSize: "11px", color: "#888" }}>{t.phone_number}</div>
+                    <span style={{ fontWeight: "900", color: "var(--primary-dark)", fontFamily: "Nunito, sans-serif" }}>
+                      #{t.order_id}
+                    </span>
+                  </td>
+                  <td>
+                    <div style={{ fontWeight: "700", color: "var(--secondary)" }}>{t.customer_name || "Guest Diner"}</div>
+                    <div style={{ fontSize: "12px", color: "var(--gray)" }}>
+                      <i className="fa fa-phone" style={{ fontSize: "10px", marginRight: "4px" }}></i>
+                      {t.phone_number || "—"}
+                    </div>
                   </td>
                   <td>
                     <span
                       style={{
-                        background: t.payment_method === "mpesa" ? "rgba(56,176,0,0.15)" : "rgba(0,180,216,0.15)",
-                        color: t.payment_method === "mpesa" ? "#38b000" : "#00b4d8",
+                        background: t.payment_method === "mpesa" ? "rgba(46, 125, 50, 0.12)" : "rgba(2, 132, 199, 0.12)",
+                        color: t.payment_method === "mpesa" ? "var(--color-success)" : "var(--color-info)",
                         padding: "3px 8px",
-                        borderRadius: "4px",
-                        fontSize: "11px",
-                        fontWeight: "700",
+                        borderRadius: "6px",
+                        fontSize: "11.5px",
+                        fontWeight: "800",
                         textTransform: "uppercase",
                       }}
                     >
                       {t.payment_method}
                     </span>
                   </td>
-                  <td style={{ fontWeight: "800", color: "#fff" }}>
-                    KES {Number(t.amount).toFixed(2)}
+                  <td>
+                    <span style={{ fontWeight: "900", color: "var(--secondary)", fontFamily: "Nunito, sans-serif", fontSize: "14.5px" }}>
+                      KES {Number(t.amount).toFixed(2)}
+                    </span>
                   </td>
                   <td>
                     <code
                       style={{
-                        background: "#1c1c1c",
-                        padding: "2px 6px",
-                        borderRadius: "4px",
-                        color: "#ffcc00",
-                        fontSize: "12px",
+                        background: "var(--light-bg)",
+                        padding: "3px 8px",
+                        borderRadius: "6px",
+                        color: "var(--primary-dark)",
+                        fontSize: "12.5px",
+                        fontWeight: "800",
+                        border: "1px solid var(--light-gray)",
                       }}
                     >
-                      {t.mpesa_receipt}
+                      {t.mpesa_receipt || "—"}
                     </code>
                   </td>
-                  <td style={{ fontSize: "11px", color: "#777", maxWidth: "160px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {t.checkout_id}
+                  <td style={{ fontSize: "11.5px", color: "var(--gray)", maxWidth: "160px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                    {t.checkout_id || "—"}
                   </td>
                   <td>
                     <span className={`status-badge status-${t.status.toLowerCase()}`}>

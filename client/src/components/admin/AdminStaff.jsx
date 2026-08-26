@@ -48,24 +48,30 @@ export default function AdminStaff() {
 
   return (
     <div>
-      <div style={{ marginBottom: "24px" }}>
-        <h2 style={{ fontSize: "20px", color: "#fff", margin: 0 }}>
-          Staff Directory & Role-Based Access Control (RBAC)
-        </h2>
-        <p style={{ fontSize: "13px", color: "#888", margin: "4px 0 0" }}>
-          Granular role permission policies protecting backend APIs and operational views.
-        </p>
+      <div className="admin-card-header">
+        <div>
+          <h2 className="admin-card-title">
+            <i className="fa fa-user-shield" style={{ color: "var(--primary)" }}></i>
+            Staff Directory & Role-Based Access Control (RBAC)
+          </h2>
+          <p className="admin-card-desc">
+            Granular role permission policies protecting backend endpoints, cash registers, and restaurant operations.
+          </p>
+        </div>
       </div>
 
       {loading ? (
-        <div className="loading-notice">Loading staff directory...</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "60px 20px" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "32px", color: "var(--primary)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>Loading Staff Directory from Database...</h4>
+        </div>
       ) : (
-        <div className="data-table-container" style={{ marginBottom: "28px" }}>
+        <div className="admin-data-table-container" style={{ marginBottom: "32px" }}>
           <table className="admin-data-table">
             <thead>
               <tr>
                 <th>Staff Member</th>
-                <th>Email</th>
+                <th>Email Address</th>
                 <th>Assigned Role</th>
                 <th>Admin Authority</th>
                 <th>Joined Date</th>
@@ -75,33 +81,58 @@ export default function AdminStaff() {
               {staffList.map((s) => (
                 <tr key={s.id}>
                   <td>
-                    <div style={{ fontWeight: "700", color: "#fff" }}>{s.name}</div>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <div
+                        style={{
+                          width: "36px",
+                          height: "36px",
+                          borderRadius: "50%",
+                          background: "var(--light-bg)",
+                          border: "1.5px solid var(--primary)",
+                          color: "var(--primary-dark)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          fontWeight: "800",
+                          fontSize: "14px",
+                          fontFamily: "Nunito, sans-serif",
+                        }}
+                      >
+                        {s.name.charAt(0)}
+                      </div>
+                      <span style={{ fontWeight: "800", color: "var(--secondary)", fontFamily: "Nunito, sans-serif" }}>
+                        {s.name}
+                      </span>
+                    </div>
                   </td>
-                  <td style={{ color: "#aaa" }}>{s.email}</td>
+                  <td style={{ color: "var(--gray)", fontSize: "13px" }}>{s.email}</td>
                   <td>
                     <span
                       style={{
-                        background: `${ROLES_INFO[s.role]?.color || "#fff"}22`,
-                        color: ROLES_INFO[s.role]?.color || "#fff",
+                        background: "var(--light-bg)",
+                        color: "var(--secondary)",
+                        border: "1px solid var(--light-gray)",
                         padding: "4px 10px",
-                        borderRadius: "8px",
+                        borderRadius: "6px",
                         fontSize: "12px",
-                        fontWeight: "700",
-                        textTransform: "uppercase",
+                        fontWeight: "800",
                       }}
                     >
+                      <i className="fa fa-id-badge" style={{ color: "var(--primary)", marginRight: "6px" }}></i>
                       {ROLES_INFO[s.role]?.title || s.role}
                     </span>
                   </td>
                   <td>
                     {s.is_admin ? (
-                      <span style={{ color: "#ffcc00", fontWeight: "700" }}>✓ Full Admin</span>
+                      <span className="status-badge status-pending" style={{ fontWeight: "800" }}>
+                        <i className="fa fa-shield-alt"></i> Full Admin
+                      </span>
                     ) : (
-                      <span style={{ color: "#888" }}>Standard Staff</span>
+                      <span style={{ color: "var(--gray)", fontSize: "12.5px" }}>Standard Staff</span>
                     )}
                   </td>
-                  <td style={{ color: "#888", fontSize: "12px" }}>
-                    {new Date(s.created_at).toLocaleDateString()}
+                  <td style={{ color: "var(--gray)", fontSize: "12.5px" }}>
+                    {new Date(s.created_at).toLocaleDateString([], { month: "short", day: "numeric", year: "numeric" })}
                   </td>
                 </tr>
               ))}
@@ -111,34 +142,40 @@ export default function AdminStaff() {
       )}
 
       {/* Role Permissions Matrix Guide */}
-      <h3 style={{ fontSize: "16px", color: "#fff", marginBottom: "16px" }}>
-        Staff Roles & Capability Matrix
-      </h3>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-          gap: "16px",
-        }}
-      >
-        {Object.entries(ROLES_INFO).map(([key, info]) => (
-          <div
-            key={key}
-            style={{
-              background: "rgba(255,255,255,0.03)",
-              border: `1px solid ${info.color}33`,
-              borderRadius: "10px",
-              padding: "16px",
-            }}
-          >
-            <div style={{ fontWeight: "800", color: info.color, marginBottom: "6px" }}>
-              {info.title}
+      <div className="admin-card">
+        <div className="admin-card-header">
+          <h3 className="admin-card-title">
+            <i className="fa fa-key" style={{ color: "var(--primary)" }}></i>
+            Staff Roles & Capability Matrix
+          </h3>
+        </div>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gap: "16px",
+          }}
+        >
+          {Object.entries(ROLES_INFO).map(([key, info]) => (
+            <div
+              key={key}
+              style={{
+                background: "var(--light-bg)",
+                border: "1px solid var(--light-gray)",
+                borderLeft: "4px solid var(--primary)",
+                borderRadius: "8px",
+                padding: "16px",
+              }}
+            >
+              <div style={{ fontWeight: "800", color: "var(--secondary)", fontFamily: "Nunito, sans-serif", fontSize: "15px", marginBottom: "6px" }}>
+                {info.title}
+              </div>
+              <div style={{ fontSize: "12.5px", color: "var(--gray)", lineHeight: "1.5" }}>
+                {info.permissions}
+              </div>
             </div>
-            <div style={{ fontSize: "12px", color: "#bbb", lineHeight: "1.4" }}>
-              {info.permissions}
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

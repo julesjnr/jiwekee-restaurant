@@ -58,57 +58,34 @@ export default function AdminTables() {
 
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
+      <div className="admin-card-header">
         <div>
-          <h2 style={{ fontSize: "20px", color: "#fff", margin: 0 }}>Floor & Table Management</h2>
-          <p style={{ fontSize: "13px", color: "#888", margin: "4px 0 0" }}>
-            Track real-time table statuses, capacity, and active diner orders.
+          <h2 className="admin-card-title">
+            <i className="fa fa-chair" style={{ color: "var(--primary)" }}></i>
+            Dining Floor & Table Capacity Management
+          </h2>
+          <p className="admin-card-desc">
+            Monitor real-time table statuses, assign dining sections, guest capacity, and track live seated dining tickets.
           </p>
         </div>
-        <button onClick={() => setIsAddModalOpen(true)} className="btn-action-sm btn-action-primary">
-          + Add Table
+        <button onClick={() => setIsAddModalOpen(true)} className="btn-restoran-primary">
+          <i className="fa fa-plus"></i> Add Table
         </button>
       </div>
 
       {loading ? (
-        <div className="loading-notice">Loading dining room tables...</div>
+        <div className="admin-card" style={{ textAlign: "center", padding: "60px 20px" }}>
+          <i className="fa fa-spinner fa-spin" style={{ fontSize: "32px", color: "var(--primary)", marginBottom: "12px", display: "block" }}></i>
+          <h4 style={{ color: "var(--secondary)", margin: 0 }}>Loading Floor & Dining Tables...</h4>
+        </div>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div className="floor-tables-grid">
           {tables.map((t) => {
-            const statusClass = t.status.toLowerCase();
+            const statusLower = t.status.toLowerCase();
             return (
               <div
                 key={t.id}
-                style={{
-                  background: "#181818",
-                  border: `2px solid ${
-                    t.status === "Occupied"
-                      ? "#ff6b6b"
-                      : t.status === "Reserved"
-                      ? "#ffcc00"
-                      : t.status === "Available"
-                      ? "#38b000"
-                      : "#555"
-                  }`,
-                  borderRadius: "12px",
-                  padding: "18px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                }}
+                className={`table-status-card table-${statusLower}`}
               >
                 <div>
                   <div
@@ -116,73 +93,75 @@ export default function AdminTables() {
                       display: "flex",
                       justifyContent: "space-between",
                       alignItems: "center",
-                      marginBottom: "10px",
+                      marginBottom: "12px",
                     }}
                   >
-                    <span style={{ fontSize: "20px", fontWeight: "800", color: "#fff" }}>
+                    <span style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "var(--secondary)" }}>
                       {t.table_number}
                     </span>
-                    <span className={`status-badge status-${statusClass}`}>
+                    <span className={`status-badge status-${statusLower === "occupied" ? "cancelled" : statusLower === "reserved" ? "pending" : "completed"}`}>
                       {t.status}
                     </span>
                   </div>
 
-                  <div style={{ fontSize: "13px", color: "#bbb", marginBottom: "6px" }}>
-                    <strong>Section:</strong> {t.section}
+                  <div style={{ fontSize: "13px", color: "var(--gray)", marginBottom: "6px" }}>
+                    <i className="fa fa-map-pin" style={{ color: "var(--primary)", marginRight: "6px" }}></i>
+                    <strong>Section:</strong> <span style={{ color: "var(--secondary)", fontWeight: "600" }}>{t.section}</span>
                   </div>
-                  <div style={{ fontSize: "13px", color: "#bbb", marginBottom: "12px" }}>
-                    <strong>Capacity:</strong> {t.capacity} Guests
+                  <div style={{ fontSize: "13px", color: "var(--gray)", marginBottom: "14px" }}>
+                    <i className="fa fa-user-friends" style={{ color: "var(--primary)", marginRight: "6px" }}></i>
+                    <strong>Capacity:</strong> <span style={{ color: "var(--secondary)", fontWeight: "600" }}>{t.capacity} Guests</span>
                   </div>
 
                   {t.activeOrder ? (
                     <div
                       style={{
-                        background: "rgba(0,180,216,0.1)",
-                        border: "1px solid rgba(0,180,216,0.25)",
+                        background: "rgba(2, 132, 199, 0.08)",
+                        border: "1px solid rgba(2, 132, 199, 0.25)",
                         borderRadius: "8px",
-                        padding: "10px",
-                        marginBottom: "14px",
-                        fontSize: "12px",
+                        padding: "10px 12px",
+                        marginBottom: "16px",
+                        fontSize: "12.5px",
                       }}
                     >
-                      <div style={{ color: "#00b4d8", fontWeight: "700" }}>
-                        Active Order #{t.activeOrder.id}
+                      <div style={{ color: "var(--color-info)", fontWeight: "800", fontFamily: "Nunito, sans-serif" }}>
+                        <i className="fa fa-receipt" style={{ marginRight: "4px" }}></i> Active Order #{t.activeOrder.id}
                       </div>
-                      <div style={{ color: "#eee" }}>
+                      <div style={{ color: "var(--secondary)", fontWeight: "600", marginTop: "2px" }}>
                         {t.activeOrder.user_name} • KES {Number(t.activeOrder.amount).toFixed(2)}
                       </div>
-                      <div style={{ color: "#888", marginTop: "2px" }}>
-                        Status: {t.activeOrder.fulfillment_status}
+                      <div style={{ color: "var(--gray)", fontSize: "11px", marginTop: "2px" }}>
+                        Status: <span className="status-badge status-preparing" style={{ padding: "1px 6px", fontSize: "10px" }}>{t.activeOrder.fulfillment_status}</span>
                       </div>
                     </div>
                   ) : (
                     <div
                       style={{
-                        background: "rgba(255,255,255,0.03)",
+                        background: "var(--light-bg)",
                         borderRadius: "8px",
-                        padding: "10px",
-                        marginBottom: "14px",
+                        padding: "10px 12px",
+                        marginBottom: "16px",
                         fontSize: "12px",
-                        color: "#777",
+                        color: "var(--gray)",
+                        border: "1px dashed var(--light-gray)",
                       }}
                     >
-                      No active ticket
+                      <i className="fa fa-check-circle" style={{ color: "var(--color-success)", marginRight: "4px" }}></i>
+                      Table ready for guest seating
                     </div>
                   )}
                 </div>
 
-                <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+                <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
                   <select
                     value={t.status}
                     onChange={(e) => handleStatusChange(t.id, e.target.value)}
+                    className="restoran-select"
                     style={{
                       flex: 1,
-                      background: "#222",
-                      color: "#fff",
-                      border: "1px solid rgba(255,255,255,0.2)",
-                      borderRadius: "6px",
-                      padding: "6px 8px",
-                      fontSize: "12px",
+                      padding: "6px 10px",
+                      fontSize: "12.5px",
+                      fontWeight: "700",
                       cursor: "pointer",
                     }}
                   >
@@ -193,9 +172,11 @@ export default function AdminTables() {
                   </select>
                   <button
                     onClick={() => handleDelete(t.id, t.table_number)}
-                    className="btn-action-sm btn-action-red"
+                    className="btn-restoran-danger"
+                    style={{ padding: "7px 10px" }}
+                    title="Delete Table"
                   >
-                    ✕
+                    <i className="fa fa-trash"></i>
                   </button>
                 </div>
               </div>
@@ -206,72 +187,80 @@ export default function AdminTables() {
 
       {/* Add Table Modal */}
       {isAddModalOpen && (
-        <div className="modal-backdrop" onClick={() => setIsAddModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Add Restaurant Table</h2>
+        <div className="admin-modal-overlay" onClick={() => setIsAddModalOpen(false)}>
+          <div className="admin-modal-box" onClick={(e) => e.stopPropagation()}>
+            <div className="admin-modal-header">
+              <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                <i className="fa fa-chair" style={{ color: "var(--primary)", fontSize: "20px" }}></i>
+                <h3 className="admin-modal-title">Add Restaurant Dining Table</h3>
+              </div>
+              <button
+                onClick={() => setIsAddModalOpen(false)}
+                className="admin-modal-close"
+              >
+                ✕
+              </button>
+            </div>
+
             <form onSubmit={handleAddTable}>
-              <div className="form-input-group">
-                <label>Table Number / Code *</label>
+              <div style={{ marginBottom: "16px" }}>
+                <label className="restoran-label">Table Number / Code *</label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g. T-07 or VIP-01"
+                  placeholder="e.g. Table 07 or VIP-01"
                   value={newTableData.table_number}
                   onChange={(e) =>
                     setNewTableData({ ...newTableData, table_number: e.target.value })
                   }
+                  className="restoran-input"
                 />
               </div>
 
-              <div className="form-input-group">
-                <label>Seating Capacity</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="20"
-                  required
-                  value={newTableData.capacity}
-                  onChange={(e) =>
-                    setNewTableData({ ...newTableData, capacity: e.target.value })
-                  }
-                />
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "16px" }}>
+                <div>
+                  <label className="restoran-label">Seating Capacity</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="20"
+                    required
+                    value={newTableData.capacity}
+                    onChange={(e) =>
+                      setNewTableData({ ...newTableData, capacity: e.target.value })
+                    }
+                    className="restoran-input"
+                  />
+                </div>
+
+                <div>
+                  <label className="restoran-label">Floor Section</label>
+                  <select
+                    value={newTableData.section}
+                    onChange={(e) =>
+                      setNewTableData({ ...newTableData, section: e.target.value })
+                    }
+                    className="restoran-select"
+                  >
+                    <option value="Main Dining">Main Dining</option>
+                    <option value="Terrace Garden">Terrace Garden</option>
+                    <option value="VIP Lounge">VIP Lounge</option>
+                    <option value="Balcony">Balcony</option>
+                    <option value="Bar & High Tables">Bar & High Tables</option>
+                  </select>
+                </div>
               </div>
 
-              <div className="form-input-group">
-                <label>Floor Section</label>
-                <select
-                  value={newTableData.section}
-                  onChange={(e) =>
-                    setNewTableData({ ...newTableData, section: e.target.value })
-                  }
-                  style={{
-                    width: "100%",
-                    padding: "10px 12px",
-                    borderRadius: "6px",
-                    border: "1px solid rgba(255,255,255,0.15)",
-                    background: "#1a1a1a",
-                    color: "#fff",
-                    fontSize: "14px",
-                  }}
-                >
-                  <option value="Main Dining">Main Dining</option>
-                  <option value="Terrace Garden">Terrace Garden</option>
-                  <option value="VIP Lounge">VIP Lounge</option>
-                  <option value="Balcony">Balcony</option>
-                  <option value="Bar & High Tables">Bar & High Tables</option>
-                </select>
-              </div>
-
-              <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "20px" }}>
+              <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end", marginTop: "24px" }}>
                 <button
                   type="button"
                   onClick={() => setIsAddModalOpen(false)}
-                  className="btn-action-sm btn-action-dark"
+                  className="btn-restoran-secondary"
                 >
                   Cancel
                 </button>
-                <button type="submit" className="btn-action-sm btn-action-primary">
-                  Save Table
+                <button type="submit" className="btn-restoran-primary">
+                  <i className="fa fa-save"></i> Save Table
                 </button>
               </div>
             </form>

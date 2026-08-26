@@ -157,98 +157,123 @@ export default function AdminLogin() {
   }
 
   return (
-    <div style={{ maxWidth: "1020px", margin: "40px auto", padding: "0 20px" }}>
-      {/* Header Banner */}
-      <div
-        style={{
-          background: "linear-gradient(180deg, #1f1a14 0%, #141414 100%)",
-          border: "1px solid #33281c",
-          borderRadius: "16px",
-          padding: "36px",
-          boxShadow: "0 24px 48px rgba(0,0,0,0.7)",
-          marginBottom: "24px",
-        }}
-      >
-        <div style={{ textAlign: "center", marginBottom: "32px" }}>
-          <h1 style={{ color: "#fff", fontSize: "30px", fontWeight: "800", margin: "0 0 8px 0", letterSpacing: "-0.5px" }}>
-            Jiwekee Operations & Staff Gateway
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--light-bg)", padding: "40px 20px 80px" }}>
+      <div style={{ maxWidth: "1080px", margin: "0 auto" }}>
+        {/* Top Header Banner - Restoran Style */}
+        <div
+          style={{
+            background: "var(--restoran-dark)",
+            borderBottom: "4px solid var(--primary)",
+            borderRadius: "var(--border-radius)",
+            padding: "36px 30px",
+            boxShadow: "var(--shadow)",
+            marginBottom: "28px",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              width: "60px",
+              height: "60px",
+              margin: "0 auto 16px",
+              borderRadius: "50%",
+              background: "linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              color: "#fff",
+              fontSize: "26px",
+              boxShadow: "0 6px 20px rgba(212, 167, 74, 0.4)",
+            }}
+          >
+            <i className="fa fa-utensils"></i>
+          </div>
+          <span style={{ fontFamily: "Pacifico, cursive", color: "var(--primary)", fontSize: "18px", display: "block", marginBottom: "4px" }}>
+            Jiwekee Tavern & Grill
+          </span>
+          <h1 style={{ fontFamily: "'Nunito', sans-serif", color: "#fff", fontSize: "32px", fontWeight: "900", margin: "0 0 10px 0", letterSpacing: "-0.5px" }}>
+            Staff & Administrative Operations Gateway
           </h1>
-          <p style={{ color: "#9ca3af", fontSize: "15px", maxWidth: "600px", margin: "0 auto", lineHeight: "1.6" }}>
-            Dedicated internal authentication for restaurant operations, floor staff, kitchen display system, and financial administration.
+          <p style={{ color: "#94A3B8", fontSize: "15px", maxWidth: "620px", margin: "0 auto", lineHeight: "1.6" }}>
+            Authorized internal access for floor servers, kitchen display station, order fulfillment, and fiscal management.
           </p>
         </div>
 
-        {/* Existing session indicator if user already logged in */}
+        {/* Existing active session notice if user is already logged in as staff */}
         {isAlreadyStaff && (
           <div
             style={{
-              background: "rgba(255, 204, 0, 0.08)",
-              border: "1px solid #ffcc0044",
-              borderRadius: "12px",
-              padding: "16px 20px",
+              background: "#FFFFFF",
+              border: "1.5px solid var(--primary)",
+              borderRadius: "var(--border-radius)",
+              padding: "18px 24px",
               marginBottom: "28px",
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               flexWrap: "wrap",
-              gap: "12px",
+              gap: "16px",
+              boxShadow: "var(--shadow-hover)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+              <div
+                style={{
+                  width: "42px",
+                  height: "42px",
+                  borderRadius: "10px",
+                  background: "rgba(212, 167, 74, 0.15)",
+                  color: "var(--primary-dark)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: "18px",
+                }}
+              >
+                <i className="fa fa-user-check"></i>
+              </div>
               <div>
-                <div style={{ color: "#fff", fontWeight: "700", fontSize: "15px" }}>
-                  Currently active as: <span style={{ color: "#ffcc00" }}>{user.name}</span>
+                <div style={{ color: "var(--secondary)", fontWeight: "800", fontSize: "16px", fontFamily: "Nunito, sans-serif" }}>
+                  Currently active as: <span style={{ color: "var(--primary-dark)" }}>{user.name}</span>
                 </div>
-                <div style={{ color: "#888", fontSize: "13px" }}>
-                  Role: <strong style={{ textTransform: "uppercase", color: "#ccc" }}>{userRole}</strong> • Email: {user.email}
+                <div style={{ color: "var(--gray)", fontSize: "13px" }}>
+                  Assigned Role: <strong style={{ textTransform: "uppercase", color: "var(--secondary)" }}>{userRole}</strong> • Email: {user.email}
                 </div>
               </div>
             </div>
+
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={() => navigate(`/admin/${getRoleDefaultTab(userRole)}`)}
-                style={{
-                  background: "linear-gradient(135deg, #ffcc00 0%, #ff9900 100%)",
-                  color: "#111",
-                  border: "none",
-                  fontWeight: "700",
-                  padding: "8px 16px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                }}
+                className="btn-restoran-primary"
               >
-                Go to Operations Hub →
+                <i className="fa fa-tachometer-alt"></i> Go to Operations Hub →
               </button>
               <button
                 onClick={async () => {
                   await logout();
                   setError("");
                 }}
-                style={{
-                  background: "#222",
-                  color: "#aaa",
-                  border: "1px solid #444",
-                  padding: "8px 14px",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                }}
+                className="btn-restoran-secondary"
               >
-                Sign Out
+                <i className="fa fa-sign-out-alt"></i> Sign Out
               </button>
             </div>
           </div>
         )}
 
-        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 1.15fr", gap: "32px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1.05fr 1.15fr", gap: "28px" }}>
           {/* Left Column: Direct Staff Authentication Form */}
           <div
             style={{
-              background: "#181818",
-              border: "1px solid #2a2a2a",
-              borderRadius: "14px",
-              padding: "26px",
+              background: "#FFFFFF",
+              border: "1px solid var(--light-gray)",
+              borderTop: "4px solid var(--primary)",
+              borderRadius: "var(--border-radius)",
+              padding: "32px 28px",
+              boxShadow: "var(--shadow)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
@@ -256,67 +281,70 @@ export default function AdminLogin() {
           >
             <div>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                <h3 style={{ color: "#fff", fontSize: "18px", fontWeight: "700", margin: 0 }}>
+                <h3 style={{ fontFamily: "Nunito, sans-serif", color: "var(--secondary)", fontSize: "20px", fontWeight: "800", margin: 0 }}>
                   Staff Sign In
                 </h3>
                 <span
                   style={{
                     fontSize: "11px",
-                    background: "#282828",
-                    color: "#888",
-                    padding: "3px 8px",
-                    borderRadius: "6px",
-                    border: "1px solid #383838",
+                    background: "rgba(212, 167, 74, 0.12)",
+                    color: "var(--primary-dark)",
+                    padding: "4px 10px",
+                    borderRadius: "var(--radius-pill)",
+                    fontWeight: "800",
+                    border: "1px solid rgba(212, 167, 74, 0.3)",
                   }}
                 >
-                  PostgreSQL & JWT Secured
+                  <i className="fa fa-lock" style={{ marginRight: "4px" }}></i> PostgreSQL & JWT
                 </span>
               </div>
 
-              <p style={{ color: "#888", fontSize: "13px", margin: "0 0 20px 0", lineHeight: "1.5" }}>
-                Enter your authorized employee credentials. Authenticated against PostgreSQL database users table.
+              <p style={{ color: "var(--gray)", fontSize: "13.5px", margin: "0 0 24px 0", lineHeight: "1.5" }}>
+                Enter your authorized employee credentials. Authenticated against the PostgreSQL staff database.
               </p>
 
               <form onSubmit={handleAdminSubmit}>
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "18px" }}>
                   <label
                     htmlFor="staff-email"
-                    style={{ display: "block", color: "#bbb", fontSize: "13px", fontWeight: "600", marginBottom: "6px" }}
+                    className="restoran-label"
                   >
                     Staff Work Email
                   </label>
-                  <input
-                    id="staff-email"
-                    type="email"
-                    required
-                    placeholder="e.g. admin@jiwekee.com"
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      setActiveTabRole(null);
-                    }}
-                    style={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      background: "#101010",
-                      border: "1px solid #3d3d3d",
-                      color: "#fff",
-                      padding: "11px 14px",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#ffcc00")}
-                    onBlur={(e) => (e.target.style.borderColor = "#3d3d3d")}
-                  />
+                  <div style={{ position: "relative" }}>
+                    <input
+                      id="staff-email"
+                      type="email"
+                      required
+                      placeholder="e.g. admin@jiwekee.com"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        setActiveTabRole(null);
+                      }}
+                      className="restoran-input"
+                      style={{ paddingLeft: "38px" }}
+                    />
+                    <i
+                      className="fa fa-envelope"
+                      style={{
+                        position: "absolute",
+                        left: "14px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--gray)",
+                        fontSize: "14px",
+                      }}
+                    ></i>
+                  </div>
                 </div>
 
-                <div style={{ marginBottom: "20px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "6px" }}>
+                <div style={{ marginBottom: "22px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
                     <label
                       htmlFor="staff-password"
-                      style={{ color: "#bbb", fontSize: "13px", fontWeight: "600" }}
+                      className="restoran-label"
+                      style={{ margin: 0 }}
                     >
                       Staff Access Key / Password
                     </label>
@@ -326,8 +354,9 @@ export default function AdminLogin() {
                       style={{
                         background: "none",
                         border: "none",
-                        color: "#ffcc00",
-                        fontSize: "12px",
+                        color: "var(--primary)",
+                        fontSize: "12.5px",
+                        fontWeight: "700",
                         cursor: "pointer",
                         padding: 0,
                       }}
@@ -335,46 +364,51 @@ export default function AdminLogin() {
                       {showPassword ? "Hide" : "Show"}
                     </button>
                   </div>
-                  <input
-                    id="staff-password"
-                    type={showPassword ? "text" : "password"}
-                    required
-                    placeholder="Enter assigned password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    style={{
-                      width: "100%",
-                      boxSizing: "border-box",
-                      background: "#101010",
-                      border: "1px solid #3d3d3d",
-                      color: "#fff",
-                      padding: "11px 14px",
-                      borderRadius: "8px",
-                      fontSize: "14px",
-                      outline: "none",
-                      transition: "border-color 0.2s",
-                    }}
-                    onFocus={(e) => (e.target.style.borderColor = "#ffcc00")}
-                    onBlur={(e) => (e.target.style.borderColor = "#3d3d3d")}
-                  />
-                  <div style={{ color: "#666", fontSize: "11px", marginTop: "4px" }}>
-                    Password: <code>Admin123!</code> or <code>password123</code>
+                  <div style={{ position: "relative" }}>
+                    <input
+                      id="staff-password"
+                      type={showPassword ? "text" : "password"}
+                      required
+                      placeholder="Enter assigned password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      className="restoran-input"
+                      style={{ paddingLeft: "38px" }}
+                    />
+                    <i
+                      className="fa fa-key"
+                      style={{
+                        position: "absolute",
+                        left: "14px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "var(--gray)",
+                        fontSize: "14px",
+                      }}
+                    ></i>
+                  </div>
+                  <div style={{ color: "var(--gray)", fontSize: "11.5px", marginTop: "6px" }}>
+                    Standard seed password: <code>Admin123!</code> or <code>password123</code>
                   </div>
                 </div>
 
                 {error && (
                   <div
                     style={{
-                      background: "rgba(239, 68, 68, 0.12)",
-                      border: "1px solid #ef4444",
-                      color: "#fca5a5",
+                      background: "#FEE2E2",
+                      border: "1px solid #FECACA",
+                      color: "#B91C1C",
                       padding: "12px 14px",
                       borderRadius: "8px",
                       fontSize: "13px",
-                      marginBottom: "18px",
+                      marginBottom: "20px",
                       lineHeight: "1.4",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
                     }}
                   >
+                    <i className="fa fa-exclamation-circle"></i>
                     {error}
                   </div>
                 )}
@@ -382,27 +416,27 @@ export default function AdminLogin() {
                 <button
                   type="submit"
                   disabled={loading}
-                  style={{
-                    width: "100%",
-                    background: "linear-gradient(135deg, #ffcc00 0%, #ff9900 100%)",
-                    color: "#111",
-                    fontWeight: "800",
-                    padding: "13px",
-                    border: "none",
-                    borderRadius: "8px",
-                    cursor: loading ? "not-allowed" : "pointer",
-                    fontSize: "15px",
-                    boxShadow: "0 4px 14px rgba(255, 204, 0, 0.25)",
-                    transition: "transform 0.1s ease",
-                  }}
+                  className="btn-restoran-primary"
+                  style={{ width: "100%", justifyContent: "center", padding: "12px", fontSize: "15px" }}
                 >
-                  {loading ? "Authenticating Staff..." : "Authenticate & Open Hub →"}
+                  {loading ? (
+                    <>
+                      <i className="fa fa-spinner fa-spin"></i> Authenticating Staff...
+                    </>
+                  ) : (
+                    <>
+                      <i className="fa fa-sign-in-alt"></i> Authenticate & Open Hub →
+                    </>
+                  )}
                 </button>
               </form>
             </div>
 
-            <div style={{ marginTop: "24px", paddingTop: "16px", borderTop: "1px solid #282828", textAlign: "center" }}>
-              <Link to="/login" style={{ color: "#888", fontSize: "13px", textDecoration: "none" }}>
+            <div style={{ marginTop: "28px", paddingTop: "18px", borderTop: "1px solid var(--light-gray)", textAlign: "center" }}>
+              <Link
+                to="/login"
+                style={{ color: "var(--gray)", fontSize: "13.5px", fontWeight: "600", textDecoration: "none" }}
+              >
                 ← Switch to Customer Ordering Portal
               </Link>
             </div>
@@ -411,67 +445,70 @@ export default function AdminLogin() {
           {/* Right Column: Database-backed Staff Directory & Fast Access */}
           <div
             style={{
-              background: "#181818",
-              border: "1px solid #2a2a2a",
-              borderRadius: "14px",
-              padding: "26px",
+              background: "#FFFFFF",
+              border: "1px solid var(--light-gray)",
+              borderTop: "4px solid var(--primary)",
+              borderRadius: "var(--border-radius)",
+              padding: "32px 28px",
+              boxShadow: "var(--shadow)",
             }}
           >
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
-              <h3 style={{ color: "#fff", fontSize: "18px", fontWeight: "700", margin: 0 }}>
+              <h3 style={{ fontFamily: "Nunito, sans-serif", color: "var(--secondary)", fontSize: "20px", fontWeight: "800", margin: 0 }}>
                 Role-Based Access Hierarchy
               </h3>
               <span
                 style={{
                   fontSize: "11px",
-                  background: "rgba(255,204,0,0.12)",
-                  color: "#ffcc00",
-                  padding: "2px 8px",
-                  borderRadius: "10px",
-                  fontWeight: "700",
-                  border: "1px solid #ffcc0033",
+                  background: "rgba(46, 125, 50, 0.12)",
+                  color: "var(--color-success)",
+                  padding: "4px 10px",
+                  borderRadius: "var(--radius-pill)",
+                  fontWeight: "800",
+                  border: "1px solid rgba(46, 125, 50, 0.25)",
                 }}
               >
-                Database Driven
+                ● Live Database
               </span>
             </div>
 
-            <p style={{ color: "#888", fontSize: "13px", margin: "0 0 16px 0", lineHeight: "1.5" }}>
+            <p style={{ color: "var(--gray)", fontSize: "13px", margin: "0 0 18px 0", lineHeight: "1.5" }}>
               Click <strong>"Autofill"</strong> to populate credentials into the form, or <strong>"1-Click"</strong> to instantly sign in and test RBAC permissions:
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: "10px", maxHeight: "440px", overflowY: "auto", paddingRight: "4px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px", maxHeight: "450px", overflowY: "auto", paddingRight: "4px" }}>
               {staffAccounts.map((acc) => (
                 <div
                   key={acc.email}
                   style={{
-                    background: activeTabRole === acc.role ? "#25221b" : "#1f1f1f",
-                    border: `1px solid ${activeTabRole === acc.role ? "#ffcc00" : "#303030"}`,
+                    background: activeTabRole === acc.role ? "rgba(212, 167, 74, 0.08)" : "var(--light-bg)",
+                    border: `1.5px solid ${activeTabRole === acc.role ? "var(--primary)" : "var(--light-gray)"}`,
                     borderRadius: "10px",
-                    padding: "12px 14px",
-                    transition: "all 0.15s ease",
+                    padding: "14px 16px",
+                    transition: "var(--transition)",
                   }}
                 >
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "6px" }}>
                     <div>
                       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                        <span style={{ fontWeight: "700", fontSize: "14px", color: "#fff" }}>
+                        <span style={{ fontFamily: "Nunito, sans-serif", fontWeight: "800", fontSize: "14.5px", color: "var(--secondary)" }}>
                           {acc.title}
                         </span>
                         <span
                           style={{
                             fontSize: "11px",
-                            background: "#2a2a2a",
-                            color: acc.badgeColor,
-                            padding: "2px 6px",
+                            background: "#FFFFFF",
+                            color: acc.badgeColor || "var(--primary-dark)",
+                            padding: "2px 8px",
                             borderRadius: "4px",
-                            fontWeight: "700",
+                            fontWeight: "800",
+                            border: "1px solid var(--light-gray)",
                           }}
                         >
                           {acc.badge}
                         </span>
                       </div>
-                      <div style={{ fontSize: "12px", color: "#aaa", marginTop: "2px" }}>
+                      <div style={{ fontSize: "12px", color: "var(--gray)", marginTop: "2px" }}>
                         {acc.email}
                       </div>
                     </div>
@@ -480,16 +517,8 @@ export default function AdminLogin() {
                       <button
                         type="button"
                         onClick={() => handleAutofill(acc)}
-                        style={{
-                          background: "#2d2d2d",
-                          color: "#ccc",
-                          border: "1px solid #444",
-                          borderRadius: "6px",
-                          padding: "4px 8px",
-                          fontSize: "11px",
-                          cursor: "pointer",
-                          fontWeight: "600",
-                        }}
+                        className="btn-restoran-secondary"
+                        style={{ padding: "4px 10px", fontSize: "11.5px" }}
                         title="Fill into login form"
                       >
                         Autofill
@@ -498,16 +527,8 @@ export default function AdminLogin() {
                         type="button"
                         onClick={() => handleQuickDemoRole(acc.role)}
                         disabled={loading}
-                        style={{
-                          background: "linear-gradient(135deg, #ffcc00 0%, #ff8800 100%)",
-                          color: "#111",
-                          border: "none",
-                          borderRadius: "6px",
-                          padding: "4px 10px",
-                          fontSize: "11px",
-                          cursor: loading ? "not-allowed" : "pointer",
-                          fontWeight: "800",
-                        }}
+                        className="btn-restoran-primary"
+                        style={{ padding: "4px 12px", fontSize: "11.5px" }}
                         title="Sign in immediately"
                       >
                         1-Click →
@@ -515,7 +536,7 @@ export default function AdminLogin() {
                     </div>
                   </div>
 
-                  <p style={{ color: "#777", fontSize: "11.5px", margin: "4px 0 0 0", lineHeight: "1.4" }}>
+                  <p style={{ color: "var(--gray)", fontSize: "12px", margin: "6px 0 0 0", lineHeight: "1.4" }}>
                     {acc.desc}
                   </p>
                 </div>

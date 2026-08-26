@@ -39,43 +39,89 @@ export default function AdminOverview({ onNavigateTab }) {
       {/* Top Metrics Row */}
       <div className="metrics-grid">
         <div className="metric-card">
-          <div className="metric-title">Today's Revenue</div>
-          <div className="metric-value metric-highlight">KES {Number(todaySales).toFixed(2)}</div>
-          <div className="metric-subtitle">Lifetime: KES {Number(totalSales).toFixed(2)}</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Today's Revenue</div>
+              <div className="metric-value metric-highlight">KES {Number(todaySales).toFixed(2)}</div>
+            </div>
+            <div className="metric-icon-wrap">
+              <i className="fa fa-dollar-sign"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-chart-line" style={{ color: "var(--primary)" }}></i> Lifetime: KES {Number(totalSales).toFixed(2)}
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">Today's Orders</div>
-          <div className="metric-value">{todayOrdersCount}</div>
-          <div className="metric-subtitle">Active operations</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Today's Orders</div>
+              <div className="metric-value">{todayOrdersCount}</div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(2, 132, 199, 0.12)", color: "var(--color-info)" }}>
+              <i className="fa fa-shopping-bag"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-clock"></i> Active restaurant operations
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">M-Pesa Collections</div>
-          <div className="metric-value metric-success">KES {Number(mpesaRevenue).toFixed(2)}</div>
-          <div className="metric-subtitle">Daraja STK Push</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">M-Pesa Collections</div>
+              <div className="metric-value metric-success">KES {Number(mpesaRevenue).toFixed(2)}</div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(46, 125, 50, 0.12)", color: "var(--color-success)" }}>
+              <i className="fa fa-mobile-alt"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-shield-alt" style={{ color: "var(--color-success)" }}></i> Safaricom Daraja STK Push
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">Wallet Revenue</div>
-          <div className="metric-value metric-info">KES {Number(walletRevenue).toFixed(2)}</div>
-          <div className="metric-subtitle">Loyalty digital wallet</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Wallet Revenue</div>
+              <div className="metric-value metric-info">KES {Number(walletRevenue).toFixed(2)}</div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(217, 119, 6, 0.12)", color: "var(--color-warning)" }}>
+              <i className="fa fa-wallet"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-star" style={{ color: "var(--color-warning)" }}></i> Loyalty digital wallet
+          </div>
         </div>
 
         <div className="metric-card">
-          <div className="metric-title">Registered Customers</div>
-          <div className="metric-value">{totalCustomers}</div>
-          <div className="metric-subtitle">Club members & diners</div>
+          <div className="metric-header">
+            <div>
+              <div className="metric-title">Registered Diners</div>
+              <div className="metric-value">{totalCustomers}</div>
+            </div>
+            <div className="metric-icon-wrap" style={{ background: "rgba(107, 114, 128, 0.12)", color: "var(--gray)" }}>
+              <i className="fa fa-users"></i>
+            </div>
+          </div>
+          <div className="metric-subtitle">
+            <i className="fa fa-award"></i> Club members & guest diner profiles
+          </div>
         </div>
       </div>
 
       {/* Order Status Counters Banner */}
       <div
+        className="admin-card"
         style={{
-          background: "#161616",
-          border: "1px solid rgba(255,255,255,0.08)",
-          borderRadius: "12px",
-          padding: "16px 20px",
+          background: "linear-gradient(135deg, #0F172B 0%, #1A2644 100%)",
+          border: "1px solid #2A3B5C",
+          borderTop: "4px solid var(--primary)",
+          color: "#fff",
           marginBottom: "28px",
         }}
       >
@@ -84,60 +130,67 @@ export default function AdminOverview({ onNavigateTab }) {
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: "12px",
+            marginBottom: "16px",
+            flexWrap: "wrap",
+            gap: "12px",
           }}
         >
-          <span style={{ fontSize: "14px", fontWeight: "700", color: "#fff" }}>
-            Live Order Status Pipeline
-          </span>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <i className="fa fa-stream" style={{ color: "var(--primary)", fontSize: "18px" }}></i>
+            <span style={{ fontFamily: "Nunito, sans-serif", fontSize: "17px", fontWeight: "800", color: "#fff" }}>
+              Live Order Status Pipeline
+            </span>
+          </div>
           <button
             onClick={() => onNavigateTab("orders")}
-            className="btn-action-sm btn-action-primary"
+            className="btn-restoran-primary"
+            style={{ padding: "6px 14px", fontSize: "12.5px" }}
           >
-            Manage Orders →
+            Manage All Orders →
           </button>
         </div>
+
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
             gap: "12px",
             textAlign: "center",
           }}
         >
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#ffcc00" }}>Pending</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#ffcc00" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(254, 243, 199, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#FDE68A", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Pending</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#FDE68A", marginTop: "2px" }}>
               {statusCounts.pending || 0}
             </div>
           </div>
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#ffaa00" }}>Confirmed</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#ffaa00" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(186, 230, 253, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#BAE6FD", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Confirmed</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#BAE6FD", marginTop: "2px" }}>
               {statusCounts.confirmed || 0}
             </div>
           </div>
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#00b4d8" }}>Preparing</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#00b4d8" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(221, 214, 254, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#DDD6FE", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Preparing</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#DDD6FE", marginTop: "2px" }}>
               {statusCounts.preparing || 0}
             </div>
           </div>
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#90e0ef" }}>Ready</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#90e0ef" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(165, 243, 252, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#A5F3FC", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Ready</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#A5F3FC", marginTop: "2px" }}>
               {statusCounts.ready || 0}
             </div>
           </div>
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#38b000" }}>Completed</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#38b000" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(187, 247, 208, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#BBF7D0", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Completed</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#BBF7D0", marginTop: "2px" }}>
               {statusCounts.completed || 0}
             </div>
           </div>
-          <div style={{ background: "#222", padding: "10px", borderRadius: "8px" }}>
-            <div style={{ fontSize: "12px", color: "#ff4d4d" }}>Cancelled</div>
-            <div style={{ fontSize: "18px", fontWeight: "800", color: "#ff4d4d" }}>
+          <div style={{ background: "rgba(255, 255, 255, 0.06)", border: "1px solid rgba(254, 202, 202, 0.2)", padding: "12px 10px", borderRadius: "10px" }}>
+            <div style={{ fontSize: "11.5px", color: "#FECACA", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.5px" }}>Cancelled</div>
+            <div style={{ fontFamily: "Nunito, sans-serif", fontSize: "22px", fontWeight: "900", color: "#FECACA", marginTop: "2px" }}>
               {statusCounts.cancelled || 0}
             </div>
           </div>
@@ -154,34 +207,25 @@ export default function AdminOverview({ onNavigateTab }) {
         }}
       >
         {/* Low Stock Alerts */}
-        <div
-          style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "12px",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "14px",
-            }}
-          >
-            <h3 style={{ fontSize: "16px", color: "#fff" }}>Low-Stock Alerts</h3>
+        <div className="admin-card">
+          <div className="admin-card-header">
+            <h3 className="admin-card-title">
+              <i className="fa fa-exclamation-triangle" style={{ color: "var(--color-warning)" }}></i>
+              Low-Stock Ingredients
+            </h3>
             <button
               onClick={() => onNavigateTab("inventory")}
-              className="btn-action-sm btn-action-dark"
+              className="btn-restoran-secondary"
+              style={{ padding: "6px 12px", fontSize: "12px" }}
             >
-              View Inventory
+              Inventory Desk
             </button>
           </div>
           {lowStockAlerts.length === 0 ? (
-            <p style={{ color: "#38b000", fontSize: "13px" }}>
-              ✓ All inventory ingredient levels are healthy.
-            </p>
+            <div style={{ padding: "20px", textAlign: "center", color: "var(--color-success)", background: "rgba(46, 125, 50, 0.06)", borderRadius: "8px" }}>
+              <i className="fa fa-check-circle" style={{ fontSize: "20px", marginBottom: "6px", display: "block" }}></i>
+              All inventory ingredient levels are healthy.
+            </div>
           ) : (
             <div>
               {lowStockAlerts.map((item) => (
@@ -190,13 +234,14 @@ export default function AdminOverview({ onNavigateTab }) {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    padding: "8px 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    fontSize: "13px",
+                    alignItems: "center",
+                    padding: "10px 0",
+                    borderBottom: "1px solid var(--light-gray)",
+                    fontSize: "13.5px",
                   }}
                 >
-                  <span style={{ color: "#eee" }}>{item.name}</span>
-                  <span style={{ color: "#ff4d4d", fontWeight: "700" }}>
+                  <span style={{ color: "var(--secondary)", fontWeight: "600" }}>{item.name}</span>
+                  <span className="status-badge status-cancelled">
                     {item.current_quantity} {item.unit} (Min: {item.min_stock_level})
                   </span>
                 </div>
@@ -206,32 +251,24 @@ export default function AdminOverview({ onNavigateTab }) {
         </div>
 
         {/* Popular Menu Items */}
-        <div
-          style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: "12px",
-            padding: "20px",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "14px",
-            }}
-          >
-            <h3 style={{ fontSize: "16px", color: "#fff" }}>Popular Menu Items</h3>
+        <div className="admin-card">
+          <div className="admin-card-header">
+            <h3 className="admin-card-title">
+              <i className="fa fa-fire" style={{ color: "var(--primary)" }}></i>
+              Top Selling Dishes
+            </h3>
             <button
               onClick={() => onNavigateTab("menu")}
-              className="btn-action-sm btn-action-dark"
+              className="btn-restoran-secondary"
+              style={{ padding: "6px 12px", fontSize: "12px" }}
             >
-              Manage Menu
+              Menu Catalog
             </button>
           </div>
           {popularItems.length === 0 ? (
-            <p style={{ color: "#888", fontSize: "13px" }}>No order data yet.</p>
+            <p style={{ color: "var(--gray)", fontSize: "13px", textAlign: "center", padding: "20px" }}>
+              No order data recorded yet.
+            </p>
           ) : (
             <div>
               {popularItems.map((item, idx) => (
@@ -240,16 +277,33 @@ export default function AdminOverview({ onNavigateTab }) {
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
-                    padding: "8px 0",
-                    borderBottom: "1px solid rgba(255,255,255,0.05)",
-                    fontSize: "13px",
+                    alignItems: "center",
+                    padding: "10px 0",
+                    borderBottom: "1px solid var(--light-gray)",
+                    fontSize: "13.5px",
                   }}
                 >
-                  <span style={{ color: "#eee" }}>
-                    #{idx + 1} {item.name}
+                  <span style={{ color: "var(--secondary)", fontWeight: "600", display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        borderRadius: "50%",
+                        background: idx === 0 ? "var(--primary)" : "var(--light-gray)",
+                        color: idx === 0 ? "#fff" : "var(--secondary)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "11px",
+                        fontWeight: "800",
+                      }}
+                    >
+                      {idx + 1}
+                    </span>
+                    {item.name}
                   </span>
-                  <span style={{ color: "#ffcc00", fontWeight: "700" }}>
-                    {item.quantity} sold (KES {item.revenue.toFixed(2)})
+                  <span style={{ color: "var(--primary-dark)", fontWeight: "800", fontFamily: "Nunito, sans-serif" }}>
+                    {item.quantity} sold <span style={{ color: "var(--gray)", fontWeight: "normal", fontSize: "12px" }}>(KES {item.revenue.toFixed(2)})</span>
                   </span>
                 </div>
               ))}
@@ -259,61 +313,80 @@ export default function AdminOverview({ onNavigateTab }) {
       </div>
 
       {/* Recent Orders Table */}
-      <div className="data-table-container" style={{ padding: "20px" }}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: "16px",
-          }}
-        >
-          <h3 style={{ fontSize: "16px", color: "#fff" }}>Recent Orders & Transactions</h3>
+      <div className="admin-card">
+        <div className="admin-card-header">
+          <h3 className="admin-card-title">
+            <i className="fa fa-receipt" style={{ color: "var(--primary)" }}></i>
+            Recent Orders & Guest Transactions
+          </h3>
           <button
             onClick={() => onNavigateTab("reconciliation")}
-            className="btn-action-sm btn-action-dark"
+            className="btn-restoran-secondary"
+            style={{ padding: "6px 14px", fontSize: "12.5px" }}
           >
-            Payment Reconciliation
+            <i className="fa fa-file-invoice-dollar"></i> Payment Reconciliation
           </button>
         </div>
-        <table className="admin-data-table">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Customer</th>
-              <th>Type / Table</th>
-              <th>Amount</th>
-              <th>Payment</th>
-              <th>Fulfillment</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {recentOrders.map((o) => (
-              <tr key={o.id}>
-                <td style={{ fontWeight: "700", color: "#ffcc00" }}>#{o.id}</td>
-                <td>{o.user_name || "Customer"}</td>
-                <td>{o.table_number ? `Table ${o.table_number}` : o.order_type}</td>
-                <td style={{ fontWeight: "700" }}>KES {Number(o.amount).toFixed(2)}</td>
-                <td>
-                  <span className={`status-badge status-${o.status.toLowerCase()}`}>
-                    {o.status} ({o.payment_method})
-                  </span>
-                </td>
-                <td>
-                  <span
-                    className={`status-badge status-${(o.fulfillment_status || "confirmed").toLowerCase().replace(/\s+/g, "-")}`}
-                  >
-                    {o.fulfillment_status || "Confirmed"}
-                  </span>
-                </td>
-                <td style={{ color: "#888" }}>
-                  {new Date(o.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-                </td>
+        <div className="admin-data-table-container" style={{ margin: 0, boxShadow: "none", border: "none" }}>
+          <table className="admin-data-table">
+            <thead>
+              <tr>
+                <th>Order #</th>
+                <th>Customer</th>
+                <th>Type / Table</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Fulfillment</th>
+                <th>Date & Time</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {recentOrders.map((o) => (
+                <tr key={o.id}>
+                  <td style={{ fontWeight: "800", color: "var(--primary-dark)", fontFamily: "Nunito, sans-serif" }}>
+                    #{o.id}
+                  </td>
+                  <td style={{ fontWeight: "600", color: "var(--secondary)" }}>
+                    {o.user_name || "Guest Customer"}
+                  </td>
+                  <td>
+                    <span
+                      style={{
+                        background: "var(--light-bg)",
+                        padding: "3px 8px",
+                        borderRadius: "4px",
+                        fontSize: "12px",
+                        fontWeight: "700",
+                        color: "var(--secondary)",
+                        border: "1px solid var(--light-gray)",
+                      }}
+                    >
+                      {o.table_number ? `Table ${o.table_number}` : o.order_type}
+                    </span>
+                  </td>
+                  <td style={{ fontWeight: "800", color: "var(--secondary)", fontFamily: "Nunito, sans-serif" }}>
+                    KES {Number(o.amount).toFixed(2)}
+                  </td>
+                  <td>
+                    <span className={`status-badge status-${o.status.toLowerCase()}`}>
+                      {o.status} ({o.payment_method})
+                    </span>
+                  </td>
+                  <td>
+                    <span
+                      className={`status-badge status-${(o.fulfillment_status || "confirmed").toLowerCase().replace(/\s+/g, "-")}`}
+                    >
+                      {o.fulfillment_status || "Confirmed"}
+                    </span>
+                  </td>
+                  <td style={{ color: "var(--gray)", fontSize: "12.5px" }}>
+                    {new Date(o.created_at).toLocaleDateString([], { month: "short", day: "numeric" })} • {new Date(o.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
