@@ -293,16 +293,6 @@ export default function Login() {
             Register here
           </Link>
         </p>
-
-        {/* Restaurant Staff & Management Portal Section */}
-        <div className="login-staff-divider">
-          <span className="login-staff-divider-text">Restaurant Staff & Management Portal</span>
-        </div>
-
-        <Link to="/staff/login" className="login-staff-btn">
-          <span className="login-staff-btn-icon">⚡</span>
-          <span>Restaurant Staff & Management Portal →</span>
-        </Link>
       </div>
     </main>
   );

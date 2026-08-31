@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import MobileBottomNav from "./components/MobileBottomNav";
 import ProtectedRoute from "./components/ProtectedRoute";
 import ErrorBoundary from "./components/ErrorBoundary";
 import Home from "./pages/Home";
@@ -22,9 +23,9 @@ export default function App() {
 
   return (
     <ErrorBoundary>
-      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }} className="app-root-container">
         {!isAdminPage && <Navbar />}
-        <div style={{ flexGrow: 1 }}>
+        <div style={{ flexGrow: 1 }} className="app-main-content">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/menu" element={<Menu />} />
@@ -118,6 +119,7 @@ export default function App() {
           </Routes>
         </div>
         {!isAdminPage && <Footer />}
+        <MobileBottomNav />
       </div>
     </ErrorBoundary>
   );
