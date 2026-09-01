@@ -3,57 +3,54 @@ import { api } from "../../api/client";
 
 export default function Stats() {
   const [stats, setStats] = useState({
-    experience: 15,
-    popularChefs: 50,
-    satisfiedCustomers: 12000,
-    diningTables: 45,
+    total_orders: 0,
+    total_customers: 0,
+    total_tables: 0,
+    menu_dishes: 0,
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Optionally fetch dynamic statistics from backend
     api
       .getStats()
       .then((data) => {
         if (data) {
-          setStats((prev) => ({
-            ...prev,
-            satisfiedCustomers: data.total_orders ? Math.max(12000, data.total_orders * 150) : 12000,
-            diningTables: data.active_tables ? Math.max(30, data.active_tables * 5) : 45,
-          }));
+          setStats(data);
         }
       })
-      .catch(() => {
-        // Use default numbers if offline
-      });
+      .catch((err) => {
+        console.error("Home stats error:", err);
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const statItems = [
     {
-      icon: "fa-user-tie",
-      count: stats.experience,
-      suffix: "+",
-      label: "Years of",
-      title: "EXPERIENCE",
+      icon: "fa-shopping-bag",
+      count: stats.total_orders ?? 0,
+      suffix: stats.total_orders > 0 ? "+" : "",
+      label: "Fulfilled",
+      title: "DINER ORDERS",
     },
     {
       icon: "fa-utensils",
-      count: stats.popularChefs,
-      suffix: "",
-      label: "Popular",
-      title: "MASTER CHEFS",
+      count: stats.menu_dishes ?? 0,
+      suffix: stats.menu_dishes > 0 ? "+" : "",
+      label: "Chef's Signature",
+      title: "GOURMET DISHES",
     },
     {
-      icon: "fa-smile-beam",
-      count: stats.satisfiedCustomers.toLocaleString(),
-      suffix: "+",
-      label: "Delighted",
-      title: "HAPPY CLIENTS",
+      icon: "fa-users",
+      count: stats.total_customers ?? 0,
+      suffix: stats.total_customers > 0 ? "+" : "",
+      label: "Registered",
+      title: "LOYAL DINERS",
     },
     {
       icon: "fa-chair",
-      count: stats.diningTables,
-      suffix: "+",
-      label: "Exclusive",
+      count: stats.total_tables ?? 0,
+      suffix: stats.total_tables > 0 ? "+" : "",
+      label: "Restaurant",
       title: "DINING TABLES",
     },
   ];

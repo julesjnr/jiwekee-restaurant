@@ -23,6 +23,7 @@ import paymentsRoutes from "./server/src/routes/payments.js";
 import walletRoutes from "./server/src/routes/wallet.js";
 import notificationsRoutes from "./server/src/routes/notifications.js";
 import auditRoutes from "./server/src/routes/audit.js";
+import { pool } from "./server/src/db/pool.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -59,9 +60,43 @@ async function startServer() {
   app.use("/api/notifications", notificationsRoutes);
   app.use("/api/audit-logs", auditRoutes);
 
-  app.get("/api/health", (_req, res) =>
-    res.json({ ok: true, timestamp: new Date().toISOString() })
-  );
+  app.get("/api/health", async (_req, res) => {
+    try {
+      const dbCheck = await pool.query("SELECT 1 AS healthy, CURRENT_TIMESTAMP AS db_time");
+      res.json({
+        ok: true,
+        database: dbCheck.rows[0]?.healthy === 1 ? "connected" : "degraded",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("[Health Check Error]", err.message);
+      res.status(503).json({
+        ok: false,
+        database: "disconnected",
+        error: "Database connectivity issue",
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
+
+  app.get("/api/health/database", async (_req, res) => {
+    try {
+      const dbCheck = await pool.query("SELECT 1 AS healthy, CURRENT_TIMESTAMP AS db_time");
+      res.json({
+        ok: true,
+        database: dbCheck.rows[0]?.healthy === 1 ? "connected" : "degraded",
+        timestamp: new Date().toISOString(),
+      });
+    } catch (err) {
+      console.error("[Database Health Error]", err.message);
+      res.status(503).json({
+        ok: false,
+        database: "disconnected",
+        error: "Unable to query PostgreSQL database",
+        timestamp: new Date().toISOString(),
+      });
+    }
+  });
 
   // Serve static uploads directory for user-uploaded dish images
   const uploadsDir = path.resolve(__dirname, "./uploads");

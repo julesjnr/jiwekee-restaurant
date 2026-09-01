@@ -129,7 +129,7 @@ export const api = {
   // Statistics, Reports & Analytics
   getStats: () => request("/stats"),
   getDashboardStats: () => request("/reports/dashboard"),
-  getSalesAnalytics: () => request("/reports/analytics"),
+  getSalesAnalytics: (params) => request("/reports/analytics", { params }),
 
   // Notifications
   getNotifications: () => request("/notifications"),

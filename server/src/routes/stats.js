@@ -15,16 +15,32 @@ router.get("/", async (_req, res) => {
     `);
 
     const tablesRes = await pool.query(`
-      SELECT COUNT(*)::int AS active_tables
+      SELECT
+        COUNT(*)::int AS total_tables,
+        COUNT(CASE WHEN LOWER(status) = 'occupied' THEN 1 END)::int AS active_tables
       FROM restaurant_tables
-      WHERE LOWER(status) = 'occupied'
+    `);
+
+    const usersRes = await pool.query(`
+      SELECT COUNT(*)::int AS total_customers
+      FROM users
+      WHERE role = 'customer' OR loyalty = true
+    `);
+
+    const menuRes = await pool.query(`
+      SELECT COUNT(*)::int AS menu_dishes
+      FROM menu_items
+      WHERE is_available = true
     `);
 
     const stats = {
-      total_orders: ordersRes.rows[0].total_orders,
-      total_revenue: ordersRes.rows[0].total_revenue,
-      active_tables: tablesRes.rows[0].active_tables,
-      today_sales: ordersRes.rows[0].today_sales,
+      total_orders: ordersRes.rows[0]?.total_orders || 0,
+      total_revenue: ordersRes.rows[0]?.total_revenue || 0,
+      today_sales: ordersRes.rows[0]?.today_sales || 0,
+      total_tables: tablesRes.rows[0]?.total_tables || 0,
+      active_tables: tablesRes.rows[0]?.active_tables || 0,
+      total_customers: usersRes.rows[0]?.total_customers || 0,
+      menu_dishes: menuRes.rows[0]?.menu_dishes || 0,
     };
 
     res.json(stats);
